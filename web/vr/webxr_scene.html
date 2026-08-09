@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BreathState VR</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #f8fafc;
+    }
+    #loading {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      z-index: 100; transition: opacity 0.8s;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    #loading h1 { font-size: 28px; color: #2dd4bf; margin-bottom: 8px; }
+    #loading p { font-size: 14px; color: #94a3b8; }
+    #loading.error .spinner { display: none; }
+    #loading.error h1 { color: #fda4af; }
+    #loading.error p { max-width: 520px; padding: 0 24px; text-align: center; }
+    #loadingRetry {
+      display: none; margin-top: 18px; padding: 9px 16px;
+      border: 1px solid rgba(255,255,255,0.28); border-radius: 6px;
+      background: #173048; color: #f8fafc; font: inherit; cursor: pointer;
+    }
+    #loading.error #loadingRetry { display: block; }
+    .spinner {
+      width: 48px; height: 48px; margin-bottom: 24px;
+      border: 3px solid rgba(45,212,191,0.2);
+      border-top-color: #2dd4bf;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #status {
+      position: fixed; top: 16px; left: 16px;
+      padding: 8px 16px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(45,212,191,0.3);
+      border-radius: 12px;
+      font-size: 12px; color: #94a3b8;
+      z-index: 50; backdrop-filter: blur(8px);
+    }
+    #status .dot {
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; margin-right: 6px;
+      vertical-align: middle;
+    }
+    #status .dot.live { background: #2dd4bf; animation: pulse-dot 2s infinite; }
+    #status .dot.demo { background: #f59e0b; }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/0.164.1/build/three.module.js",
+      "three/addons/": "./vendor/three/0.164.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="loading">
+    <div class="spinner"></div>
+    <h1>BreathState VR</h1>
+    <p id="loadingStatus">Loading immersive biofeedback...</p>
+    <button id="loadingRetry" type="button">Retry</button>
+  </div>
+  <div id="status">
+    <span class="dot demo" id="statusDot"></span>
+    <span id="statusText">Demo mode</span>
+  </div>
+  <script>
+    (() => {
+      const boot = {
+        stage: 'html-ready',
+        failed: false,
+        mark(stage) {
+          this.stage = stage;
+          const status = document.getElementById('loadingStatus');
+          if (status && !this.failed) status.textContent = stage;
+        },
+        fail(error) {
+          if (this.failed) return;
+          this.failed = true;
+          const loading = document.getElementById('loading');
+          const status = document.getElementById('loadingStatus');
+          const message = error && error.message
+            ? error.message
+            : String(error || 'Unknown startup error');
+          if (loading) loading.classList.add('error');
+          if (status) status.textContent = `VR startup failed at ${this.stage}: ${message}`;
+          console.error('BreathState VR startup failed:', error);
+        },
+      };
+      window.__breathStateVrBoot = boot;
+      window.addEventListener('error', (event) => boot.fail(event.error || event.message));
+      window.addEventListener('unhandledrejection', (event) => boot.fail(event.reason));
+      document.getElementById('loadingRetry').addEventListener('click', () => location.reload());
+    })();
+  </script>
+  <script type="module">
+    window.__breathStateVrBoot.mark('Loading VR modules...');
+    const moduleTimeout = setTimeout(() => {
+      window.__breathStateVrBoot.fail(new Error('VR module request timed out'));
+    }, 25000);
+    import('./webxr_biofeedback.js?v=25')
+      .then(() => clearTimeout(moduleTimeout))
+      .catch((error) => {
+        clearTimeout(moduleTimeout);
+        window.__breathStateVrBoot.fail(error);
+      });
+  </script>
+</body>
+</html>

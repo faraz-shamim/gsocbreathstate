@@ -1,0 +1,23 @@
+﻿Analyzing web_ble.dart...
+
+  error - web_ble.dart:163:37 - The getter 'buffer' isn't defined for the type 'JSDataView'. Try importing the library that defines 'buffer', correcting the name to the name of an existing getter, or defining a getter or field named 'buffer'. - undefined_getter
+  error - web_ble.dart:166:20 - The getter 'byteOffset' isn't defined for the type 'JSDataView'. Try importing the library that defines 'byteOffset', correcting the name to the name of an existing getter, or defining a getter or field named 'byteOffset'. - undefined_getter
+  error - web_ble.dart:167:20 - The getter 'byteLength' isn't defined for the type 'JSDataView'. Try importing the library that defines 'byteLength', correcting the name to the name of an existing getter, or defining a getter or field named 'byteLength'. - undefined_getter
+  error - web_ble.dart:197:33 - The getter 'buffer' isn't defined for the type 'JSDataView'. Try importing the library that defines 'buffer', correcting the name to the name of an existing getter, or defining a getter or field named 'buffer'. - undefined_getter
+  error - web_ble.dart:200:16 - The getter 'byteOffset' isn't defined for the type 'JSDataView'. Try importing the library that defines 'byteOffset', correcting the name to the name of an existing getter, or defining a getter or field named 'byteOffset'. - undefined_getter
+  error - web_ble.dart:201:16 - The getter 'byteLength' isn't defined for the type 'JSDataView'. Try importing the library that defines 'byteLength', correcting the name to the name of an existing getter, or defining a getter or field named 'byteLength'. - undefined_getter
+warning - web_ble.dart:185:54 - This 'onError' handler must return a value assignable to 'BluetoothRemoteGATTCharacteristic', but ends without returning a value. Try adding a return statement. - body_might_complete_normally_catch_error
+   info - web_ble.dart:5:8 - The import of 'dart:typed_data' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/foundation.dart'. Try removing the import directive. - unnecessary_import
+
+8 issues found.
+
+Generate me an extremely well written implementation plan for my VR scene.
+What i want:
+1. Garden like ground with grass all over animated like swaying in a breeze.
+2. Few bush flowers here and there.
+3. A large Sakura or Maple tree in the center animated as:
+a. Leaves grow on the branches as coherence increases and at 100% coherence the tree looks extremely beautiful and blossomed
+b. Leaves fall off when coherence decreases and the tree withers.
+4. The sky is starry and a moon shines.
+
+The plan should be very well written; also find the links to the perfect assets; tell me which format to download it in and then supply it to you for proper integration. 

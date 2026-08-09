@@ -1,0 +1,16 @@
+Summary of all new files:
+
+databse.dart
+record screens
+sess history Card
+main.dart
+
+session_detail_page
+session_history_card
+session_history_page
+
+rftrainer
+res-freq
+
+home screen
+

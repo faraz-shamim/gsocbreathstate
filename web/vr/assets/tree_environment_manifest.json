@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "sceneId": "breathstate_single_tree_clearing",
+  "sourceImplementation": "web/vr/webxr_biofeedback.js",
+  "assetStrategy": "local_scene_v2_gltf_with_procedural_fallback",
+  "coordinateSystem": {
+    "units": "meters",
+    "forward": "-Z",
+    "up": "+Y",
+    "treeOrigin": [0, 0, -4.2]
+  },
+  "portableAssets": [
+    {
+      "id": "single_resonance_tree",
+      "kind": "tree",
+      "currentForm": "local_gltf_scene_v2",
+      "currentPackage": "scene_v2/oak_tree_quest.glb",
+      "fallbackForm": "procedural_instanced_geometry",
+      "futurePackage": "single_resonance_tree.glb",
+      "requiredControls": [
+        "leafDensity",
+        "greenSaturation",
+        "canopyFullness",
+        "trunkGlow",
+        "fallingLeaves"
+      ]
+    },
+    {
+      "id": "quiet_clearing_ground",
+      "kind": "environment",
+      "currentForm": "procedural_mesh_and_shader_with_scene_v2_textures",
+      "futurePackage": "quiet_clearing_ground.glb",
+      "requiredControls": ["groundSoftness", "ambientTier"]
+    },
+    {
+      "id": "breath_guide_ring",
+      "kind": "pacer",
+      "currentForm": "procedural_ring_and_marker",
+      "futurePackage": "breath_guide_ring.glb",
+      "requiredControls": [
+        "phase",
+        "phaseProgress",
+        "cycleProgress",
+        "highContrastGuide"
+      ]
+    },
+    {
+      "id": "calm_particle_layers",
+      "kind": "particles",
+      "currentForm": "instanced_points_and_leaf_planes",
+      "futurePackage": "calm_particles.json",
+      "requiredControls": ["reducedParticles", "ambientTier", "treeVitalityScore"]
+    }
+  ],
+  "textureTargets": [
+    {
+      "id": "leaf_atlas",
+      "format": "ktx2_or_webp",
+      "notes": "Use green saturation and density from tree_progress; avoid baked clinical state."
+    },
+    {
+      "id": "bark_emission_mask",
+      "format": "ktx2_or_webp",
+      "notes": "Drive emission intensity from trunkGlow."
+    },
+    {
+      "id": "ground_soft_light_mask",
+      "format": "ktx2_or_webp",
+      "notes": "Drive opacity/intensity from groundSoftness and ambientTier."
+    }
+  ],
+  "clinicalStateSource": "docs/webxr_bridge_contract.md"
+}

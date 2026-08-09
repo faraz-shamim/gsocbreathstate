@@ -1,0 +1,342 @@
+import 'dart:async';
+import 'dart:developer' as developer;
+import 'dart:convert';
+import 'package:breath_state/services/heart_rate/polar_connect.dart';
+import 'package:breath_state/services/file_service/file_write.dart';
+import 'package:breath_state/constants/file_constants.dart';
+import 'package:breath_state/services/hrv_analysis/hrv_time_domain.dart';
+import 'package:breath_state/services/hrv_analysis/resonance_frequency_analyzer.dart';
+import 'package:breath_state/services/hrv_analysis/continuous_sweep_analyzer.dart';
+
+class ResonanceFrequency {
+  static double userResonanceFreq = 0;
+  final List<PolarEcgSample> _ecgBuffer = [];
+  final List<int> _rPeaksTimestamps = [];
+
+  final Map<double, double> rmssdResults = {};
+  final Map<double, HrvTimeDomainResult> hrvResults = {};
+  final Map<double, List<double>> rrIntervalsPerRate = {};
+
+  final int _timeInterval = 40;                      
+
+  final int _smoothWindowSize = 10;
+  final int _minGapMs = 200;
+
+  PolarConnect? _polar;
+  StreamSubscription? _ecgSub;
+
+  final fileWriter = FileWriterService();
+
+                                  
+  ContinuousSweepEngine? _sweepEngine;
+  StreamSubscription? _sweepRrSub;
+
+                                                  
+  void Function(SweepStatus status)? onSweepStatusUpdate;
+
+  ResonanceFrequency();
+
+                                                                    
+                                                                    
+                                                                    
+
+  Future<void> _getEcgData() async {
+    if (_polar == null) {
+      developer.log("Polar device not set!");
+      return;
+    }
+    final ecgStream = await _polar!.getECG();
+    _ecgSub = ecgStream.listen(
+      (sampleBatch) {
+        _ecgBuffer.addAll(sampleBatch);
+      },
+      onError: (err) {
+        developer.log("ECG Stream Error: $err");
+      },
+    );
+  }
+
+  Future<void> calculateRMSSDForBreathingRate({
+    required double breathingRate,
+    required PolarConnect polar,
+  }) async {
+    _polar = polar;
+    _ecgBuffer.clear();
+
+    developer.log(
+      "Starting ECG collection for breathing rate $breathingRate...",
+    );
+    await _getEcgData();
+
+    await Future.delayed(Duration(seconds: _timeInterval));
+
+    await polar.stopRecording();
+
+    developer.log("ECG data so far: ${_ecgBuffer.length} samples");
+
+    List<double> smoothed = _detectRPeaks(_ecgBuffer);
+
+    try {
+      final timestamp = DateTime.now().toIso8601String();
+      final data = {
+        "timestamp": timestamp,
+        "breathingRate": breathingRate,
+        "ecgSmoothed": smoothed,
+      };
+      await fileWriter.writeStringToFile(jsonEncode(data), ECG_FILE_NAME);
+    } catch (e) {
+      developer.log("Error saving ECG data: $e");
+    }
+    List<double> rrIntervals = [];
+    for (int i = 1; i < _rPeaksTimestamps.length; i++) {
+      final interval =
+          (_rPeaksTimestamps[i] - _rPeaksTimestamps[i - 1]).toDouble();
+      rrIntervals.add(interval);
+      developer.log("RR Interval ${i - 1}: ${interval.toInt()} ms");
+    }
+
+                                                         
+    rrIntervalsPerRate[breathingRate] = List<double>.from(rrIntervals);
+
+    if (rrIntervals.length >= 2) {
+      final hrvResult = HrvTimeDomain.compute(rrIntervals);
+      rmssdResults[breathingRate] = hrvResult.rmssd;
+      hrvResults[breathingRate] = hrvResult;
+      developer.log(
+        "RMSSD at $breathingRate BPM breathing: ${hrvResult.rmssd}",
+      );
+    } else {
+      rmssdResults[breathingRate] = 0.0;
+      developer.log("Not enough RR intervals at $breathingRate BPM");
+    }
+
+    await _ecgSub?.cancel();
+  }
+
+  List<double> _detectRPeaks(List<PolarEcgSample> samples) {
+    _rPeaksTimestamps.clear();
+
+    List<double> smoothed = [];
+    for (int i = 0; i < samples.length; i++) {
+      int start =
+          (i - _smoothWindowSize ~/ 2).clamp(0, samples.length - 1).toInt();
+      int end =
+          (i + _smoothWindowSize ~/ 2).clamp(0, samples.length - 1).toInt();
+      double sum = 0;
+      for (int j = start; j <= end; j++) {
+        sum += samples[j].voltage.toDouble();
+      }
+      smoothed.add(double.parse((sum / (end - start + 1)).toStringAsFixed(3)));
+    }
+
+    double avgVoltage = smoothed.reduce((a, b) => a + b) / smoothed.length;
+
+    bool above = false;
+    int lastPeakTime = -_minGapMs;
+
+    for (int i = 0; i < smoothed.length; i++) {
+      double val = smoothed[i];
+      int timeMs = samples[i].timeStamp.millisecondsSinceEpoch;
+
+      if (!above && val > avgVoltage) {
+        if (timeMs - lastPeakTime >= _minGapMs) {
+          _rPeaksTimestamps.add(timeMs);
+          lastPeakTime = timeMs;
+        }
+        above = true;
+      } else if (above && val < avgVoltage) {
+        above = false;
+      }
+    }
+    return smoothed;
+  }
+
+  double getResonanceBreathingRate() {
+    if (rmssdResults.isEmpty) {
+      developer.log("No RMSSD results available.");
+      return 0.0;
+    }
+    double maxRmssd = rmssdResults.values.reduce((a, b) => a > b ? a : b);
+    userResonanceFreq =
+        rmssdResults.entries.firstWhere((entry) => entry.value == maxRmssd).key;
+    return userResonanceFreq;
+  }
+
+  HrvTimeDomainResult? getWinningHrvResult() {
+    final winningRate = getResonanceBreathingRate();
+    return hrvResults[winningRate];
+  }
+
+                                                                       
+                                                        
+                                                                
+  ResonanceFrequencyResult? getResonanceFrequencyResult() {
+    if (rrIntervalsPerRate.length < 2) {
+      developer.log('Not enough trials for enhanced resonance analysis');
+      return null;
+    }
+
+    final trialDataList = <ResonanceTrialData>[];
+    for (final entry in rrIntervalsPerRate.entries) {
+      trialDataList.add(
+        ResonanceTrialData(
+          targetBreathingRateBpm: entry.key,
+          rrIntervalsMs: entry.value,
+          trialDurationSec: 45,
+        ),
+      );
+    }
+
+    try {
+      final result = ResonanceFrequencyAnalyzer.analyze(trialDataList);
+                                                                        
+      userResonanceFreq = result.optimalBreathingRateBpm;
+      developer.log(
+        'Enhanced resonance analysis: optimal = '
+        '${result.optimalBreathingRateBpm} BPM '
+        '(confidence: ${(result.confidence * 100).toStringAsFixed(0)}%, '
+        'composite: ${(result.optimalCompositeScore * 100).toStringAsFixed(0)}/100)',
+      );
+      return result;
+    } catch (e) {
+      developer.log('Enhanced resonance analysis failed: $e');
+                                                
+      getResonanceBreathingRate();
+      return null;
+    }
+  }
+
+                                                                    
+                                    
+                                                                    
+
+                                                               
+     
+                                                                        
+                                                                         
+                                                                      
+                                   
+     
+                                                                 
+     
+                                                               
+                                                             
+                                               
+  Future<SweepResonanceResult> runContinuousSweep({
+    required PolarConnect polar,
+    SweepConfig config = const SweepConfig(),
+    void Function(SweepStatus)? onStatus,
+  }) async {
+    _polar = polar;
+    _sweepEngine = ContinuousSweepEngine(config: config);
+    onSweepStatusUpdate = onStatus;
+
+    developer.log(
+      'Starting continuous sweep: '
+      '${config.startRateBpm} → ${config.endRateBpm} BPM '
+      'over ${config.sweepDurationSec}s '
+      '(inhale:exhale = ${(config.inhaleFraction * 100).round()}:'
+      '${((1 - config.inhaleFraction) * 100).round()})',
+    );
+
+    final completer = Completer<SweepResonanceResult>();
+    final startTime = DateTime.now();
+
+                                                 
+    try {
+      final rrStream = await polar.getRrIntervals();
+      _sweepRrSub = rrStream.listen(
+        (rrMs) {
+          if (completer.isCompleted) return;
+
+          final elapsedSec =
+              DateTime.now().difference(startTime).inMilliseconds / 1000.0;
+
+          final status = _sweepEngine!.addRrInterval(rrMs, elapsedSec);
+
+                            
+          onSweepStatusUpdate?.call(status);
+          onStatus?.call(status);
+
+                             
+          if (status.shouldStop) {
+            developer.log('Sweep early stop triggered');
+            _finishSweep(completer, elapsedSec);
+            return;
+          }
+
+                                                
+          if (elapsedSec >= config.sweepDurationSec) {
+            developer.log('Sweep duration complete');
+            _finishSweep(completer, elapsedSec);
+          }
+        },
+        onError: (err) {
+          developer.log('Sweep RR stream error: $err');
+          if (!completer.isCompleted) {
+            if (_sweepEngine?.hasDataPoints ?? false) {
+              final elapsed =
+                  DateTime.now().difference(startTime).inMilliseconds / 1000.0;
+              _finishSweep(completer, elapsed);
+            } else {
+              completer.completeError(
+                StateError(
+                  'Polar HR stream stopped before usable RR data arrived: $err',
+                ),
+              );
+            }
+          }
+        },
+      );
+
+                                                             
+      Timer(Duration(seconds: config.sweepDurationSec.toInt() + 30), () {
+        if (!completer.isCompleted) {
+          developer.log('Sweep safety timeout reached');
+          final elapsed =
+              DateTime.now().difference(startTime).inMilliseconds / 1000.0;
+          _finishSweep(completer, elapsed);
+        }
+      });
+    } catch (e) {
+      developer.log('Failed to start sweep RR stream: $e');
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
+    }
+
+    return completer.future;
+  }
+
+  void _finishSweep(
+    Completer<SweepResonanceResult> completer,
+    double elapsedSec,
+  ) {
+    _sweepRrSub?.cancel();
+    _sweepRrSub = null;
+
+    if (!completer.isCompleted && _sweepEngine != null) {
+      final result = _sweepEngine!.finalize(elapsedSec);
+
+                                          
+      userResonanceFreq = result.optimalBreathingRateBpm;
+
+      developer.log(
+        'Sweep result: optimal = ${result.optimalBreathingRateBpm} BPM '
+        '(confidence: ${(result.confidence * 100).toStringAsFixed(0)}%, '
+        'RSA: ${result.optimalRsaAmplitude.toStringAsFixed(1)} ms, '
+        'early stop: ${result.earlyStopTriggered})',
+      );
+
+      completer.complete(result);
+    }
+  }
+
+                                  
+  void cancelSweep() {
+    _sweepRrSub?.cancel();
+    _sweepRrSub = null;
+    _sweepEngine = null;
+    developer.log('Sweep cancelled');
+  }
+}

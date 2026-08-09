@@ -1,0 +1,46 @@
+{
+  "protocolVersion": "fisher_lehrer_2022_reference_v1",
+  "schedule": {
+    "cycleCount": 78,
+    "startPeriodMs": 8888.88888888889,
+    "targetEndPeriodMs": 14117.6470588235,
+    "periodIncrementMs": 67.0353611530082,
+    "lastExecutedPeriodMs": 14050.6116976705,
+    "lastExecutedBpm": 4.27027671755725,
+    "scheduledDurationMs": 894640.522875817
+  },
+  "ectopicCorrection": {
+    "referenceSampleRateHz": 256,
+    "inputIntervalMs": [1000, 500, 1500, 1000],
+    "correctedIntervalMs": [1000, 1000, 1000, 1000],
+    "correctedIndices": [1, 2]
+  },
+  "lowessLinear": {
+    "x": [0, 1, 2, 3, 4, 5, 6],
+    "y": [3, 5, 7, 9, 11, 13, 15],
+    "neighborhoodPoints": 5,
+    "expected": [3, 5, 7, 9, 11, 13, 15]
+  },
+  "lowessEndpointTrim": {
+    "x": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    "y": [1, 4, 2, 8, 3, 9, 5, 7, 6],
+    "neighborhoodPoints": 5,
+    "expected": [
+      1.3646799691446245,
+      2.699495245643106,
+      4.290484140233723,
+      4.8505843071786305,
+      6.149415692821369,
+      6.136894824707847,
+      6.717863105175292,
+      6.29846643301622,
+      6.109330797686372
+    ]
+  },
+  "extrema": {
+    "elapsedMs": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "values": [1, 3, 2, -1, -4, -2, 1, 5, 2, -1, -3, 1, 2],
+    "expectedTimesMs": [1, 4, 7, 10],
+    "expectedValues": [3, -4, 5, -3]
+  }
+}

@@ -1,0 +1,610 @@
+{
+  "assetPackage": "sanctuary_v3",
+  "files": [
+    {
+      "bytes": 270936,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_materials_clearcoat",
+        "KHR_materials_emissive_strength",
+        "KHR_materials_specular",
+        "KHR_mesh_quantization"
+      ],
+      "images": 3,
+      "materials": 6,
+      "path": "assets/sanctuary_v3/atmosphere/aurora_quest.glb",
+      "sha256": "601f33ff54471199d72b290ae23344beca0592d81e92612e77c40f620b51b1a0",
+      "triangles": 27975,
+      "type": "glb",
+      "vertices": 47265
+    },
+    {
+      "bytes": 126738,
+      "path": "assets/sanctuary_v3/atmosphere/moon_albedo.webp",
+      "sha256": "8a01321cbaf39786f2098c58833a42e0e0d127f0e23560bfe2df84eb224aa702",
+      "type": "webp"
+    },
+    {
+      "bytes": 11958,
+      "path": "assets/sanctuary_v3/atmosphere/moon_normal.webp",
+      "sha256": "06cb9eb7af0dde1870f0198eb2f0f93bee2adca5c5dac75abe5de8786b98008a",
+      "type": "webp"
+    },
+    {
+      "bytes": 154328,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_materials_pbrSpecularGlossiness",
+        "KHR_mesh_quantization"
+      ],
+      "images": 1,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/atmosphere/moon_quest.glb",
+      "sha256": "c1ce09bd9c7851fa9d1da0a974a029c103266148f85b953af66e79d04b38951b",
+      "triangles": 4416,
+      "type": "glb",
+      "vertices": 2487
+    },
+    {
+      "bytes": 123120,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 3,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/bush1_quest.glb",
+      "sha256": "ff5a5081a14b27b04dcba5ccc368dfe9a5d5c16bfc2258d3d18bcab4efa5ead6",
+      "triangles": 4076,
+      "type": "glb",
+      "vertices": 6108
+    },
+    {
+      "bytes": 179376,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_materials_specular",
+        "KHR_mesh_quantization"
+      ],
+      "images": 3,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/bush2_quest.glb",
+      "sha256": "58d1d25f2a4459c6d1aa647c908ac77f146d2c8862abf14b71461db7ac0a3959",
+      "triangles": 1745,
+      "type": "glb",
+      "vertices": 2924
+    },
+    {
+      "bytes": 1977876,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_materials_unlit",
+        "KHR_mesh_quantization"
+      ],
+      "images": 5,
+      "materials": 5,
+      "path": "assets/sanctuary_v3/details/bush3_quest.glb",
+      "sha256": "af8f6c4475fe12eeae981c3bbf3dd3c91a4292ea58a6cad42ad0ca4f85a9b1ab",
+      "triangles": 132220,
+      "type": "glb",
+      "vertices": 189050
+    },
+    {
+      "bytes": 17148,
+      "extensionsUsed": [
+        "EXT_mesh_gpu_instancing",
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "images": 0,
+      "materials": 3,
+      "path": "assets/sanctuary_v3/details/bush4_quest.glb",
+      "sha256": "d53f6fcabeda4a38d15316aac0d9126ecbc8cbd6897a03c4bf691437b435d219",
+      "triangles": 274,
+      "type": "glb",
+      "vertices": 582
+    },
+    {
+      "bytes": 50496,
+      "extensionsUsed": [
+        "EXT_mesh_gpu_instancing",
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 4,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/bush5_quest.glb",
+      "sha256": "7d9fe66687135581261b34982127b2abee5811bfb0da32ef821a0c06b3c0357c",
+      "triangles": 503,
+      "type": "glb",
+      "vertices": 363
+    },
+    {
+      "bytes": 130568,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 3,
+      "materials": 2,
+      "path": "assets/sanctuary_v3/details/chamomile_quest.glb",
+      "sha256": "84ab3d51b7055513adc53fd1105f193d28b8a0b25ddb02447431dd9dec54e4d8",
+      "triangles": 4656,
+      "type": "glb",
+      "vertices": 7484
+    },
+    {
+      "bytes": 31804,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/glowing_plants_parts_quest.glb",
+      "sha256": "be7142deb9871535ae7f242be07505df6615265c3de9f197369aa2708c055539",
+      "triangles": 1120,
+      "type": "glb",
+      "vertices": 923
+    },
+    {
+      "bytes": 23312,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 1,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/lavender_quest.glb",
+      "sha256": "5d5a224d7c3aa3037cd86bf18fd15622579cf590b1018670968a15aa959edea4",
+      "triangles": 200,
+      "type": "glb",
+      "vertices": 400
+    },
+    {
+      "bytes": 169080,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_materials_unlit",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 2,
+      "path": "assets/sanctuary_v3/details/rock1_quest.glb",
+      "sha256": "75a4d71f1e1f1a5fd7c2e8fda7600e76016e9bfafef2dd556010e3f5c6f4b240",
+      "triangles": 6761,
+      "type": "glb",
+      "vertices": 5087
+    },
+    {
+      "bytes": 194880,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 3,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/rock2_quest.glb",
+      "sha256": "f4781ea7db8e389d1c9a189fe7bc614677c86ffcb206f92e4f58cc72b1ac0538",
+      "triangles": 6909,
+      "type": "glb",
+      "vertices": 3569
+    },
+    {
+      "bytes": 261788,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 3,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/details/rock3_quest.glb",
+      "sha256": "bcc755bd4d63d14622c0ae18e09efd528866dfa1afe19585def49b9843132b38",
+      "triangles": 5381,
+      "type": "glb",
+      "vertices": 3759
+    },
+    {
+      "bytes": 479464,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 9,
+      "materials": 3,
+      "path": "assets/sanctuary_v3/details/rock_pack_quest.glb",
+      "sha256": "00188458fa06e7783d04de17a63b95d7f70fdc170a64f50b80709eb0bab9a199",
+      "triangles": 4038,
+      "type": "glb",
+      "vertices": 2398
+    },
+    {
+      "bytes": 3872,
+      "extensionsUsed": [],
+      "images": 0,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/environment/animated_grass_variants.glb",
+      "sha256": "0c27b2ecd17c87cb7310e25d030ed9606a58e74c0292e60a43922e54a97aae82",
+      "triangles": 54,
+      "type": "glb",
+      "vertices": 24
+    },
+    {
+      "bytes": 2383000,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/environment/landscape_high.glb",
+      "sha256": "7552dc3728ab6f9d945981324f1d7e7fb8a76e05543bf9203214388a77c096ac",
+      "triangles": 262143,
+      "type": "glb",
+      "vertices": 145984
+    },
+    {
+      "bytes": 1666580,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/environment/landscape_quest_lod0.glb",
+      "sha256": "3c43fcae18f8cad76cec0fe48451fcab1e6b7457b533774a93b8c14cb2164b52",
+      "triangles": 125827,
+      "type": "glb",
+      "vertices": 75655
+    },
+    {
+      "bytes": 1188780,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 1,
+      "path": "assets/sanctuary_v3/environment/landscape_quest_lod1.glb",
+      "sha256": "17290c0de52eb0a4355fbb0b8474d11389584795fcd2636570ca9f390cc417fe",
+      "triangles": 47184,
+      "type": "glb",
+      "vertices": 29275
+    },
+    {
+      "bytes": 31761,
+      "path": "assets/sanctuary_v3/manifest.json",
+      "sha256": "48153d21216be02831afc86307249e1a866399349a728943c0529820ad25e707",
+      "type": "json"
+    },
+    {
+      "bytes": 1475584,
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_materials_ior",
+        "KHR_materials_specular"
+      ],
+      "images": 43,
+      "materials": 20,
+      "path": "assets/sanctuary_v3/tree/falling_leaves_animated_quest.glb",
+      "sha256": "bcd901503b550cf0237d65c530eb229f266effd0799e69269df90422d7c24e84",
+      "triangles": 11899,
+      "type": "glb",
+      "vertices": 10361
+    },
+    {
+      "bytes": 40378,
+      "path": "assets/sanctuary_v3/tree/sakura_canopy_shadow.webp",
+      "sha256": "b1c46b1c49d87dc41b9f2257d22d083f7f0106d917b73a21b836aebf90025759",
+      "type": "webp"
+    },
+    {
+      "bytes": 64342,
+      "path": "assets/sanctuary_v3/tree/sakura_falling_petal.png",
+      "sha256": "a609c602f8a4cad8a0a6e56d80fa1731a9a3e40bff56f37ca77963004e986877",
+      "type": "png"
+    },
+    {
+      "bytes": 4730,
+      "path": "assets/sanctuary_v3/tree/sakura_ground_ao.webp",
+      "sha256": "fb2334d32383d9d49c409e23a0ee15fc5352ce31244f1284fc215500c0709c8a",
+      "type": "webp"
+    },
+    {
+      "bytes": 18904,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 1,
+      "materials": 2,
+      "path": "assets/sanctuary_v3/tree/sakura_ground_petals.glb",
+      "sha256": "d18fa6bbbb1d0ceb37edd65ce488aaa83f417b392de00b354f106e199e1c36ac",
+      "triangles": 26,
+      "type": "glb",
+      "vertices": 34
+    },
+    {
+      "bytes": 519404,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 2,
+      "path": "assets/sanctuary_v3/tree/sakura_hero_lod0.glb",
+      "sha256": "df9834dd33fd26acaf1d0409343410d6f8a0e065d70abb5b04b26fa4ed6c5e21",
+      "triangles": 7007,
+      "type": "glb",
+      "vertices": 7748
+    },
+    {
+      "bytes": 258684,
+      "extensionsUsed": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "images": 2,
+      "materials": 2,
+      "path": "assets/sanctuary_v3/tree/sakura_hero_lod1.glb",
+      "sha256": "7dda32e81c5acc60542a3a285c78f1ef70c323d88631a13f489e63817a43fc50",
+      "triangles": 4966,
+      "type": "glb",
+      "vertices": 6473
+    },
+    {
+      "bytes": 5113220,
+      "extensionsUsed": [],
+      "images": 2,
+      "materials": 2,
+      "path": "assets/sanctuary_v3/tree/sakura_hero_source.glb",
+      "sha256": "939a68c1b92ad1ab1808ef7c659c4eddb4f6c96da3cdeb860a186c34f172fd7c",
+      "triangles": 7007,
+      "type": "glb",
+      "vertices": 7748
+    },
+    {
+      "bytes": 62337,
+      "path": "libs/basis/basis_transcoder.js",
+      "sha256": "48a0ef319a28bf0224ee88ded34f74eaf97c175bba9eb18b47fb9720510ad6c4",
+      "type": "js"
+    },
+    {
+      "bytes": 499935,
+      "path": "libs/basis/basis_transcoder.wasm",
+      "sha256": "79ae97d781e10a566659c689b7bb1de91726453f55f9f5e3bcc07a4e3904070f",
+      "type": "wasm"
+    },
+    {
+      "bytes": 512465,
+      "path": "libs/draco/gltf/draco_decoder.js",
+      "sha256": "8625489da79a805f4f2a7d511c3e52d8b4085608a9d2a4d5f4f9de5db0aea04f",
+      "type": "js"
+    },
+    {
+      "bytes": 192420,
+      "path": "libs/draco/gltf/draco_decoder.wasm",
+      "sha256": "a680d927bed9cb864ddbd63521868891af2bfbe755092761b4837487618df8ac",
+      "type": "wasm"
+    },
+    {
+      "bytes": 58456,
+      "path": "libs/draco/gltf/draco_wasm_wrapper.js",
+      "sha256": "8bb2952d2ba7d67e1414f8df819410cb0434a666be53f671fff75f68843d76f6",
+      "type": "js"
+    },
+    {
+      "bytes": 27134,
+      "path": "sanctuary_v3/sanctuary_atmosphere.js",
+      "sha256": "36b83cc596f2929f38886e1c6e979b1030c4ab348fd87af4be28373dfe30d69e",
+      "type": "js"
+    },
+    {
+      "bytes": 35625,
+      "path": "sanctuary_v3/sanctuary_canopy.js",
+      "sha256": "7637f469e8a177fbfbc2eb606c272313fc24f088c7ba897747b997aa30d00506",
+      "type": "js"
+    },
+    {
+      "bytes": 10169,
+      "path": "sanctuary_v3/sanctuary_canopy_math.js",
+      "sha256": "53d8d93a48acf8720ab8534428ed721af7d65b28876d2a1e2a9ef9be1303fb33",
+      "type": "js"
+    },
+    {
+      "bytes": 1756,
+      "path": "sanctuary_v3/sanctuary_canopy_profiler.js",
+      "sha256": "4e6e3fd88d4faa6aa500463cb19f82fa7dd208e0ef4847693a6b6ae75f2a23ea",
+      "type": "js"
+    },
+    {
+      "bytes": 14933,
+      "path": "sanctuary_v3/sanctuary_details.js",
+      "sha256": "b3aa00b3dda2e9fa49f2ce67662d0d40b65e14c56a86f5518e10cd18e46eabc1",
+      "type": "js"
+    },
+    {
+      "bytes": 5714,
+      "path": "sanctuary_v3/sanctuary_guidance.js",
+      "sha256": "e132011a63a1def6e093c1917e305b59730609a9d41d0db4c94030d738e66eea",
+      "type": "js"
+    },
+    {
+      "bytes": 23949,
+      "path": "sanctuary_v3/sanctuary_landscape.js",
+      "sha256": "45cb0ecfb32c2faa59ce2423cd48a9d2ed4968d9138f5d45f6f382fd216c1aa8",
+      "type": "js"
+    },
+    {
+      "bytes": 4169,
+      "path": "sanctuary_v3/sanctuary_performance.js",
+      "sha256": "945421d41a60496d4d0d63410444cf8c63d8ba3fa823d4e96c5fd8b3eb47eea2",
+      "type": "js"
+    },
+    {
+      "bytes": 27551,
+      "path": "sanctuary_v3/sanctuary_petals.js",
+      "sha256": "78b8589d5a436bd17bbab0cbc7e32cf5620f70f81bb0bedb8bab95b2263876c7",
+      "type": "js"
+    },
+    {
+      "bytes": 27101,
+      "path": "sanctuary_v3/sanctuary_scene.js",
+      "sha256": "2bf571a71e4d45721b9696ae6d049d23d2ac0b730e065563e50394966b6f3a8f",
+      "type": "js"
+    },
+    {
+      "bytes": 7432,
+      "path": "sanctuary_v3/sanctuary_tree_state.js",
+      "sha256": "f8ecda2163afcd2e6fab71c171676dc0e9d54d0dcba9093ad5e422860e4479d5",
+      "type": "js"
+    },
+    {
+      "bytes": 1114,
+      "path": "sanctuary_v3/sanctuary_validation_cycle.js",
+      "sha256": "ef3009ee75ff49dd4b8e8bc4da1850620bc263ec4cfba529580789474564d371",
+      "type": "js"
+    },
+    {
+      "bytes": 1274691,
+      "path": "vendor/three/0.164.1/build/three.module.js",
+      "sha256": "a97ec6852978949b7941c070b81292b842473a37549222353fa0a70c18d7285a",
+      "type": "js"
+    },
+    {
+      "bytes": 1878,
+      "path": "vendor/three/0.164.1/examples/jsm/curves/NURBSCurve.js",
+      "sha256": "34dee297704432358680934a8d5acae35f05c71aa59ce7a8e97decb0ac38e452",
+      "type": "js"
+    },
+    {
+      "bytes": 9150,
+      "path": "vendor/three/0.164.1/examples/jsm/curves/NURBSUtils.js",
+      "sha256": "0abeeab213f423c6ea7170abe045e6d27d63c0a1164e67de1da881e0e5c7480f",
+      "type": "js"
+    },
+    {
+      "bytes": 89384,
+      "path": "vendor/three/0.164.1/examples/jsm/libs/fflate.module.js",
+      "sha256": "209a4412eb48ce609edb4391992a792ffcc3983d30ee7e2b0b89a8c470f3cd8a",
+      "type": "js"
+    },
+    {
+      "bytes": 18676,
+      "path": "vendor/three/0.164.1/examples/jsm/libs/ktx-parse.module.js",
+      "sha256": "f73948e7bbf8db386076fda0458160bdb50ce2e11e88fa7da0f339e1ec547493",
+      "type": "js"
+    },
+    {
+      "bytes": 24850,
+      "path": "vendor/three/0.164.1/examples/jsm/libs/meshopt_decoder.module.js",
+      "sha256": "01f48524f4bac6141eaba07e94cc36e7ee56f311796fa6117c159842941b0468",
+      "type": "js"
+    },
+    {
+      "bytes": 39754,
+      "path": "vendor/three/0.164.1/examples/jsm/libs/zstddec.module.js",
+      "sha256": "5cbf818e842628a4464e748594a6deae18ceddda3c2f541e7b3a0ff5fc7611e2",
+      "type": "js"
+    },
+    {
+      "bytes": 13628,
+      "path": "vendor/three/0.164.1/examples/jsm/loaders/DRACOLoader.js",
+      "sha256": "65c114ecb7b349cdc59c75b2c92d19cca672a138060dba0f60f64262fa40408c",
+      "type": "js"
+    },
+    {
+      "bytes": 61180,
+      "path": "vendor/three/0.164.1/examples/jsm/loaders/EXRLoader.js",
+      "sha256": "9ab29edbe812c6f48fd70910643d15433d5efcd0e4e2a2ca24b2bcb9a7eefe6b",
+      "type": "js"
+    },
+    {
+      "bytes": 101472,
+      "path": "vendor/three/0.164.1/examples/jsm/loaders/FBXLoader.js",
+      "sha256": "a3d0eb238e9d67964aae83265312b630940b357706918c37974136ccdb3102ce",
+      "type": "js"
+    },
+    {
+      "bytes": 109781,
+      "path": "vendor/three/0.164.1/examples/jsm/loaders/GLTFLoader.js",
+      "sha256": "4e7c3ad7d8fb4c388169e0692b0782e427fba5f54ff424436f6fe0ccefdbbeef",
+      "type": "js"
+    },
+    {
+      "bytes": 23148,
+      "path": "vendor/three/0.164.1/examples/jsm/loaders/KTX2Loader.js",
+      "sha256": "0ed556b20aee3477ddae6f6c3d4cf4a80102400775c52cf403e728880c950a7a",
+      "type": "js"
+    },
+    {
+      "bytes": 21175,
+      "path": "vendor/three/0.164.1/examples/jsm/loaders/OBJLoader.js",
+      "sha256": "022e0334f837c60506276e136faf3e54b21b20aea672eed4a0c50651d4fc0a5d",
+      "type": "js"
+    },
+    {
+      "bytes": 31554,
+      "path": "vendor/three/0.164.1/examples/jsm/utils/BufferGeometryUtils.js",
+      "sha256": "b0c64fe6f3b9907262921b73fafc4ade874c07ba6b4876e164c87a830c2c2113",
+      "type": "js"
+    },
+    {
+      "bytes": 1712,
+      "path": "vendor/three/0.164.1/examples/jsm/utils/WorkerPool.js",
+      "sha256": "94ff7b608caf3b827ffa95bd6092b9d174732b856915b38ed006b4f049f95675",
+      "type": "js"
+    },
+    {
+      "bytes": 4801,
+      "path": "vendor/three/0.164.1/examples/jsm/webxr/VRButton.js",
+      "sha256": "ea36edbb0f2e72c3036927c6d5c137c750eb85f54385699a86ad30398307b55d",
+      "type": "js"
+    },
+    {
+      "bytes": 1081,
+      "path": "vendor/three/0.164.1/LICENSE",
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454",
+      "type": "unknown"
+    },
+    {
+      "bytes": 9,
+      "path": "vendor/three/0.164.1/VERSION",
+      "sha256": "b91b71a5133914bb55eb3fcf125407dddd19c92a955e9240026b98e9188fda4f",
+      "type": "unknown"
+    },
+    {
+      "bytes": 230491,
+      "path": "webxr_biofeedback.js",
+      "sha256": "d4fb4154eebaf9aca104d3c6874f8b042b1df5df7113a9cd0a6386647760e5e6",
+      "type": "js"
+    },
+    {
+      "bytes": 4515,
+      "path": "webxr_scene.html",
+      "sha256": "d4f54ece6968f309848bb544ca109f4ab3e7638cbf4ae1117ed2ae84ee25a094",
+      "type": "html"
+    }
+  ],
+  "manifestVersion": 25,
+  "version": 1
+}

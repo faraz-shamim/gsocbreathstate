@@ -1,0 +1,520 @@
+{
+  "version": 25,
+  "assetPackage": "sanctuary_v3",
+  "phase": 18,
+  "defaultQuality": "quest",
+  "status": "minimal-xr-controls-trend-canopy-audio-performance",
+  "runtimeAssets": {
+    "heroSakura": {
+      "quest": "tree/sakura_hero_lod0.glb",
+      "fallbackLod": "tree/sakura_hero_lod1.glb",
+      "highAndSourceFallback": "tree/sakura_hero_source.glb",
+      "canopyShadow": "tree/sakura_canopy_shadow.webp",
+      "rootAo": "tree/sakura_ground_ao.webp"
+    },
+    "landscape": {
+      "quest": "environment/landscape_quest_lod0.glb",
+      "fallbackLod": "environment/landscape_quest_lod1.glb",
+      "high": "environment/landscape_high.glb",
+      "authoredGrassVariants": "environment/animated_grass_variants.glb"
+    },
+    "petals": {
+      "animatedFalling": "tree/falling_leaves_animated_quest.glb",
+      "fallingTexture": "tree/sakura_falling_petal.png",
+      "groundPatches": "tree/sakura_ground_petals.glb"
+    },
+    "organicDetails": {
+      "rocks": [
+        "details/rock1_quest.glb",
+        "details/rock2_quest.glb",
+        "details/rock3_quest.glb",
+        "details/rock_pack_quest.glb"
+      ],
+      "flowers": [
+        "details/lavender_quest.glb",
+        "details/chamomile_quest.glb",
+        "details/glowing_plants_parts_quest.glb"
+      ],
+      "bushes": [
+        "details/bush1_quest.glb",
+        "details/bush2_quest.glb",
+        "details/bush3_quest.glb",
+        "details/bush4_quest.glb",
+        "details/bush5_quest.glb"
+      ]
+    },
+    "atmosphere": {
+      "moon": "atmosphere/moon_quest.glb",
+      "moonAlbedoFallback": "atmosphere/moon_albedo.webp",
+      "moonNormalFallback": "atmosphere/moon_normal.webp",
+      "aurora": "atmosphere/aurora_quest.glb"
+    }
+  },
+  "treeProfile": {
+    "speciesPresentation": "Prunus Somei-Yoshino inspired",
+    "targetHeightMeters": 9.0,
+    "targetPosition": [0, 0, -6.8],
+    "sourceCanopyLayers": 1,
+    "dynamicCanopyLayers": 2,
+    "defaultCanopyMode": "dynamic",
+    "dynamicCanopyQuery": "?canopy=dynamic",
+    "sourceCanopyRollbackQuery": "?canopy=source",
+    "coherenceInputs": [
+      "treeVitality.vitality",
+      "metrics.coherence",
+      "breath.cycleProgress",
+      "comfortOptions.reducedMotion"
+    ],
+    "behavior": "Branch-aware dynamic mode is the production default. It extracts authored blossom-card anchors, hides the source blossom mesh only after successful initialization, and renders only sakura blossoms: one instanced pink blossom layer plus one authored peak-bloom layer. The former textureless green polygon layer is disabled. Sparse coherence reveals the real branches; rising coherence grows pink blossoms; accepted clinical decline withers and retracts those blossoms. Extraction, shader initialization, or runtime count/uniform integrity failures immediately restore the authored source canopy, and ?canopy=source remains the manual rollback."
+  },
+  "assetBudgets": {
+    "maxRuntimeAssetBytes": 18874368,
+    "heroSakuraDenseCanopyEstimatedMaxTriangles": 12100,
+    "sourceCanopyLayerDrawCalls": 1,
+    "maxDynamicCanopyDrawCalls": 2,
+    "dynamicCanopyQuestEstimatedTriangles": 5040,
+    "dynamicCanopyHighEstimatedTriangles": 6480,
+    "exactOriginPetalDrawCalls": 1,
+    "assets": {
+      "tree/sakura_hero_lod0.glb": {
+        "maxBytes": 1048576,
+        "maxTriangles": 8000,
+        "requiredExtensions": [
+          "EXT_meshopt_compression",
+          "EXT_texture_webp"
+        ]
+      },
+      "tree/sakura_hero_lod1.glb": {
+        "maxBytes": 524288,
+        "maxTriangles": 5500,
+        "requiredExtensions": [
+          "EXT_meshopt_compression",
+          "EXT_texture_webp"
+        ]
+      },
+      "tree/sakura_hero_source.glb": {
+        "maxBytes": 6291456,
+        "maxTriangles": 8000,
+        "requiredExtensions": []
+      },
+      "tree/sakura_canopy_shadow.webp": {
+        "maxBytes": 65536,
+        "requiredExtensions": []
+      },
+      "tree/sakura_ground_ao.webp": {
+        "maxBytes": 16384,
+        "requiredExtensions": []
+      },
+      "environment/landscape_quest_lod0.glb": {
+        "maxBytes": 2097152,
+        "maxTriangles": 140000,
+        "requiredExtensions": [
+          "EXT_meshopt_compression",
+          "EXT_texture_webp"
+        ]
+      },
+      "environment/landscape_quest_lod1.glb": {
+        "maxBytes": 1572864,
+        "maxTriangles": 55000,
+        "requiredExtensions": [
+          "EXT_meshopt_compression",
+          "EXT_texture_webp"
+        ]
+      },
+      "environment/landscape_high.glb": {
+        "maxBytes": 3145728,
+        "maxTriangles": 300000,
+        "requiredExtensions": [
+          "EXT_meshopt_compression",
+          "EXT_texture_webp"
+        ]
+      },
+      "environment/animated_grass_variants.glb": {
+        "maxBytes": 8192,
+        "maxTriangles": 60,
+        "requiredExtensions": []
+      },
+      "tree/falling_leaves_animated_quest.glb": {
+        "maxBytes": 2097152,
+        "maxTriangles": 12000,
+        "requiredExtensions": [
+          "EXT_texture_webp"
+        ]
+      },
+      "tree/sakura_falling_petal.png": {
+        "maxBytes": 131072,
+        "requiredExtensions": []
+      },
+      "tree/sakura_ground_petals.glb": {
+        "maxBytes": 262144,
+        "maxTriangles": 100,
+        "requiredExtensions": [
+          "EXT_meshopt_compression",
+          "EXT_texture_webp"
+        ]
+      },
+      "details/rock1_quest.glb": {
+        "maxBytes": 262144,
+        "maxTriangles": 7000,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/rock2_quest.glb": {
+        "maxBytes": 262144,
+        "maxTriangles": 7000,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/rock3_quest.glb": {
+        "maxBytes": 393216,
+        "maxTriangles": 5500,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/rock_pack_quest.glb": {
+        "maxBytes": 524288,
+        "maxTriangles": 4500,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/lavender_quest.glb": {
+        "maxBytes": 65536,
+        "maxTriangles": 250,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/chamomile_quest.glb": {
+        "maxBytes": 196608,
+        "maxTriangles": 5000,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/glowing_plants_parts_quest.glb": {
+        "maxBytes": 65536,
+        "maxTriangles": 1200,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/bush1_quest.glb": {
+        "maxBytes": 196608,
+        "maxTriangles": 4500,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/bush2_quest.glb": {
+        "maxBytes": 262144,
+        "maxTriangles": 2000,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/bush3_quest.glb": {
+        "maxBytes": 2097152,
+        "maxTriangles": 135000,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "details/bush4_quest.glb": {
+        "maxBytes": 65536,
+        "maxTriangles": 500,
+        "requiredExtensions": ["EXT_meshopt_compression"]
+      },
+      "details/bush5_quest.glb": {
+        "maxBytes": 131072,
+        "maxTriangles": 600,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "atmosphere/moon_quest.glb": {
+        "maxBytes": 262144,
+        "maxTriangles": 4500,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      },
+      "atmosphere/moon_albedo.webp": {
+        "maxBytes": 196608,
+        "requiredExtensions": []
+      },
+      "atmosphere/moon_normal.webp": {
+        "maxBytes": 32768,
+        "requiredExtensions": []
+      },
+      "atmosphere/aurora_quest.glb": {
+        "maxBytes": 393216,
+        "maxTriangles": 30000,
+        "requiredExtensions": ["EXT_meshopt_compression", "EXT_texture_webp"]
+      }
+    }
+  },
+  "landscapeProfile": {
+    "source": "../new/landscape.glb",
+    "runtimeDiameterMeters": 92,
+    "verticalReliefScale": 0.68,
+    "questLod0Triangles": 125827,
+    "questLod1Triangles": 47184,
+    "highTriangles": 262143,
+    "placement": "The optimized terrain is rotated 180 degrees so the source asset's positive-Z mountain ridge faces the user's negative-Z view, centred at z=-5.3, restored to 68 percent vertical relief, and shifted so the sampled surface beneath the sakura trunk is y=0.",
+    "heightSampling": "A deterministic CPU height grid is generated from transformed landscape vertices at load time. Grass positions and normals are sampled from that grid without per-instance raycasts."
+  },
+  "grassProfile": {
+    "renderer": "Three GPU InstancedMesh layers built from three intact blade variants extracted from the supplied Animated+Grass.glb, with one shared wind shader using Lambert lighting on Quest and PBR lighting in high quality",
+    "source": "../new/Animated+Grass.glb",
+    "questInstances": 96000,
+    "highInstances": 210000,
+    "questEstimatedTriangles": 1589760,
+    "highEstimatedTriangles": 3477600,
+    "bands": [
+      "near: 28000 detailed overlapping authored clumps",
+      "mid: 32000 medium overlapping authored clumps",
+      "far: 36000 wide lightweight authored clumps"
+    ],
+    "behavior": "A deterministic two-dimensional low-discrepancy distribution keeps 96,000 wider Quest clumps spread across overlapping near, mid, and far terrain bands. Grass density and healthy green colour remain constant across coherence and adaptive performance tiers so only the sakura communicates biofeedback. Thin authored blades follow terrain height and cached normals, vary in scale and colour, become shorter around the seated user and tree base, and sway through two low-frequency breeze waves."
+  },
+  "coherenceTreeProfile": {
+    "stateModule": "sanctuary_v3/sanctuary_tree_state.js",
+    "riseRatePerSecond": 0.28,
+    "declineRatePerSecond": 0.22,
+    "improvingHysteresis": 0.012,
+    "decliningHysteresis": 0.016,
+    "poorSignalBehavior": "Freeze the last valid vitality target and return petal shedding to a quiet ambient level. Signal loss never causes withering.",
+    "outputs": [
+      "vitality",
+      "leafCoverage",
+      "blossomCoverage",
+      "canopyHealth",
+      "blossomHealth",
+      "branchWarmth",
+      "sheddingRate",
+      "shedImpulse",
+      "vitalityTrend",
+      "coherenceTrend",
+      "fullBloom",
+      "fullBloomProgress"
+    ],
+    "fullBloomLatch": "Enter after at least 95 percent accepted coherence for five seconds; exit after less than 88 percent accepted coherence for three seconds. Signal loss resets timers without changing the latched state.",
+    "dynamicCanopy": {
+      "questLeaves": 900,
+      "questBlossoms": 720,
+      "highLeaves": 1400,
+      "highBlossoms": 1080,
+      "renderedGreenLeafLayer": false,
+      "presentation": "Pink sakura blossoms grow and retract directly on authored branch anchors; no generic green polygon foliage is rendered.",
+      "minimumAuthoredAnchors": 400,
+      "leafBirthSeconds": 0.75,
+      "blossomBirthSeconds": 1.1,
+      "maximumGrowthPerSecond": 0.1,
+      "fullBloomMaximumGrowthPerSecond": 0.25,
+      "fullBloomRevealSeconds": 4.0,
+      "fullBloomRetireSeconds": 3.0,
+      "fullBloomLightPulseSeconds": 4.0,
+      "peakLayer": "The original authored blossom geometry unfolds card-by-card from local card centres, preserving its embedded map and PBR lighting while shifting toward pearl pink.",
+      "comfortPolicy": "Reduced motion lowers branch sway and leaf-opening rotation. Reduced particles affects falling petals only and never changes persistent canopy density.",
+      "adaptivePolicy": "Performance scaling may reduce rendered canopy capacity, but only removals beyond the renderer-independent clinical target may emit branch-detachment petals."
+    },
+    "sheddingPolicy": "Only accepted negative blossom-coverage movement with a non-trivial shed impulse emits branch-detachment events. Adaptive quality reductions, comfort particle limits, stable low coherence, and signal loss never create clinical shedding events."
+  },
+  "petalProfile": {
+    "fallingSource": "Runtime curved and notched sakura-petal geometry",
+    "authoredNonSakuraAnimation": "Bundled for rollback only and disabled in production",
+    "groundSource": "../new/cherry_petals2.glb",
+    "questAnimatedFallingMeshes": 0,
+    "highAnimatedFallingMeshes": 0,
+    "animatedLeafGeometryScale": 0.18,
+    "animatedDepthOffsetMeters": -2.0,
+    "canopyFallHeightMeters": 5.7,
+    "zeroFallCoherence": 1.0,
+    "fallbackMaxFallingInstances": 210,
+    "questExactOriginInstances": 96,
+    "highExactOriginInstances": 160,
+    "questGroundPatchInstances": 58,
+    "questDrawCalls": 3,
+    "highDrawCalls": 3,
+    "animationClip": "Non-sakura authored leaf animation disabled",
+    "geometry": "Nine-vertex curved petal with a recognisable two-lobed tip and centre notch; no opaque rectangular texture card.",
+    "behavior": "Quest and high quality use pooled instanced pink sakura-petal meshes for ambient and exact-origin layers, keeping falling petals to two effect draws plus the ground-petal draw. Dynamic-canopy petals begin at real authored blossom anchors and expire on terrain contact. At 100 percent coherence or while full bloom is latched, queues and active petals are cleared. Reduced motion lowers drift; reduced particles caps exact-origin petals at 24; adaptive quality scales capacity without producing false shedding."
+  },
+  "organicDetailProfile": {
+    "questInstances": 102,
+    "questEstimatedTriangles": 335775,
+    "questEstimatedDrawCalls": 22,
+    "highQualityAdditionalTriangles": 132220,
+    "placement": "All details sample landscape height and normal. A protected corridor from the seated user to the sakura and controls remains free of bushes, rocks, and flower patches.",
+    "qualityPolicy": "Quest uses increased placements of every requested rock, flower, and bush asset, including one distant bush3; high quality uses two bush3 placements.",
+    "coherenceBehavior": "Flowers receive restrained vitality warmth. Named glowing-plant leaf meshes remain natural green while their flower-orb meshes emit a controlled purple coherence and breathing-linked pulse. Rocks remain visually stable.",
+    "shading": "Quest uses texture-preserving Lambert materials for vegetation and rocks; high quality retains the full PBR material path. Authored material groups remain separate so texture atlases and flower/stem distinctions are not damaged."
+  },
+  "atmosphereProfile": {
+    "questStars": 50000,
+    "highStars": 75000,
+    "questFireflies": 900,
+    "highFireflies": 1300,
+    "moonDiameterMeters": 3.15,
+    "moonTriangles": 4416,
+    "moonMaterial": "The optimized GLB retains its embedded lunar albedo and any normal, roughness, or AO maps. Restrained cool emission preserves crater contrast instead of washing the moon into a white disk.",
+    "auroraTriangles": 27975,
+    "estimatedDrawCalls": 11,
+    "sky": "One inward-facing procedural midnight gradient dome plus one shader point-cloud draw call. No night-sky GLB or EXR is loaded.",
+    "fireflies": "One GPU-animated warm radial point-cloud draw call; 74 percent are concentrated near the sakura. Multi-axis drift is paired with independent deep blink gates so particles repeatedly glow and become dark; reduced-particles mode lowers the active range to 28 percent.",
+    "comfort": "Stars use independent deep twinkle cycles rather than constant brightness. Reduced motion slows star twinkle, firefly drift, and aurora waves. Aurora opacity remains restrained and all atmospheric elements are fixed-position without locomotion.",
+    "coherenceBehavior": "Vitality gently warms the horizon, reveals the aurora, lifts moonlight, and slightly brightens fireflies. Fog density falls from 0.021 toward 0.0145 as vitality rises."
+  },
+  "guidanceProfile": {
+    "renderer": "One soft additive ground-ring shader plus one phase marker",
+    "position": [0, 0.038, -6.8],
+    "drawCalls": 2,
+    "behavior": "The tree-root ring expands during inhale, contracts during exhale, changes between teal, warm gold, and lavender phase colours, and traces cycle progress with a small moving marker. A central high-contrast panel names INHALE, EXHALE, HOLD, PAUSED, and setup-error states with seconds, progress, coherence, BPM, and session time.",
+    "comfort": "Reduced motion lowers spatial expansion while retaining colour and brightness timing. High-contrast mode widens and brightens the ring and marker. Paused and idle sessions remain softly visible."
+  },
+  "adaptiveQualityProfile": {
+    "enabledQuality": "quest",
+    "warmupFrames": 120,
+    "slowFrameThresholdMs": 12.5,
+    "slowFramesBeforeReduction": 60,
+    "fastFrameThresholdMs": 11.4,
+    "fastFramesBeforeRecovery": 900,
+    "levels": [
+      "full: 1.00",
+      "balanced: 0.76",
+      "protected: 0.52"
+    ],
+    "protectedContent": "Clinical timing, controller hit targets, the hero sakura, landscape, breathing guide, status text, and session state are never removed or slowed.",
+    "adaptiveContent": "Dynamic canopy capacity, falling petals, stars, fireflies, aurora opacity, and optional details scale after sustained XR frame pressure. Meadow density, the authored trunk, source fallback, and clinical interactions remain protected; transitions are smoothed before renderer counts change."
+  },
+  "releaseHardeningProfile": {
+    "questRenderer": {
+      "pixelRatioCap": 1.25,
+      "xrFramebufferScale": 0.78,
+      "initialFoveation": 0.78,
+      "balancedFoveation": 0.9,
+      "protectedFoveation": 1.0,
+      "stencil": false,
+      "powerPreference": "high-performance"
+    },
+    "contextRecovery": "WebGL context loss is prevented from becoming terminal, the loading surface reports recovery, renderer state is reset, and scene materials are recompiled after restoration.",
+    "xrLifecycle": "Session start requests the highest supported refresh rate up to 90 Hz, then reapplies camera layers, foveation, and recentering. Session end clears hover state and resets frame timing so desktop resume cannot create a slow-frame spike.",
+    "diagnostics": "window.getBreathStateVrDiagnostics() returns renderer policy, bounded lifecycle events, context recovery counts, and the renderer-independent sanctuary snapshot. It excludes patient IDs and clinical measurements.",
+    "startup": "Entry-module and scene watchdogs, bounded asset requests, visible error stages, retry, and progressive fallback prevent an indefinite loader."
+  },
+  "canopyValidationProfile": {
+    "query": "?canopyTest=cycle",
+    "cycleSeconds": 55,
+    "stages": [
+      "sparse",
+      "growth",
+      "full-bloom",
+      "wither",
+      "recovery"
+    ],
+    "dataPolicy": "The deterministic cycle runs only while the host is in demo mode. An active or live host session remains authoritative and is never overwritten.",
+    "runtimeIntegrity": "Rendered and target instance counts, full-bloom reveal, and material-health uniforms are validated every update. Any invalid value restores the authored source canopy.",
+    "profiling": "The existing Quest profile records transition starts, total and XR transition frames, average and maximum transition frame time, slow transition frames, active leaf/blossom counts, adaptive scale, and integrity failures without patient identifiers."
+  },
+  "questPerformanceProfile": {
+    "diagnosticQuery": "?debug=1&perfTier=protected",
+    "questGrassTriangleBudget": 1800000,
+    "questGrassInstanceBudget": 96000,
+    "petalPolicy": "Quest and high quality use pooled curved sakura-petal geometry; the 20-mesh broad-leaf skeletal animation is retained only as a disabled rollback asset.",
+    "progressiveDistribution": "Grass remains spatially uniform and constant across coherence states. Wider overlapping authored clumps preserve meadow coverage with 96,000 Quest instances while reducing vertex cost.",
+    "optionalDetailPolicy": "Balanced and protected tiers reduce optional detail instance counts. Protected mode may hide bush3, bush4, bush5, and rock_pack while preserving rocks, flowers, glowing plants, the landscape, guidance, controls, and sakura.",
+    "governor": "Quest targets an 80 Hz floor: sustained frame times above 12.5 ms degrade after 60 scored samples, while recovery requires 900 samples below 11.4 ms."
+  },
+  "runtimeEfficiencyProfile": {
+    "profileSamplingHz": 4,
+    "adaptiveRangeStep": 0.02,
+    "grassShading": "lambert-quest",
+    "detailShading": "lambert-quest",
+    "highQualityShading": "pbr-high",
+    "sceneSnapshotPolicy": "The render loop consumes the performance state already computed by SanctuarySceneV3.update(). Complete scene diagnostics are created only while the debug profiler is visible and at no more than four samples per second.",
+    "rangeUpdatePolicy": "Grass ranges remain fixed. Detail, star, and firefly render ranges change only when the smoothed adaptive scale crosses a two-percent bucket or a comfort particle setting changes.",
+    "inactivePetalPolicy": "Empty exact-origin and ambient falling-petal pools skip scans and GPU instance-buffer uploads. A reusable matrix helper removes per-frame Object3D allocation during active shedding.",
+    "moduleGraphVersion": 25,
+    "moduleCachePolicy": "The WebXR entry module and every local Sanctuary dependency share the manifest version query so a long-lived Quest Browser cannot combine modules from different releases."
+  },
+  "buildPipeline": {
+    "tool": "tool/vr_sanctuary_v3_pipeline.py",
+    "buildScript": "tool/build_vr_sanctuary_v3.ps1",
+    "inventory": "inventory.json",
+    "threeVersion": "0.164.1",
+    "gltfTransformVersion": "4.4.1",
+    "dependencyRoots": [
+      "vendor/three/0.164.1",
+      "libs/basis",
+      "libs/draco"
+    ],
+    "runtimeDependencies": [
+      "webxr_scene.html",
+      "webxr_biofeedback.js",
+      "sanctuary_v3/sanctuary_scene.js",
+      "sanctuary_v3/sanctuary_atmosphere.js",
+      "sanctuary_v3/sanctuary_landscape.js",
+      "sanctuary_v3/sanctuary_details.js",
+      "sanctuary_v3/sanctuary_guidance.js",
+      "sanctuary_v3/sanctuary_canopy_math.js",
+      "sanctuary_v3/sanctuary_canopy.js",
+      "sanctuary_v3/sanctuary_canopy_profiler.js",
+      "sanctuary_v3/sanctuary_validation_cycle.js",
+      "sanctuary_v3/sanctuary_tree_state.js",
+      "sanctuary_v3/sanctuary_petals.js",
+      "sanctuary_v3/sanctuary_performance.js"
+    ],
+    "forbiddenRuntimeFormats": [
+      ".blend",
+      ".exr",
+      ".fbx",
+      ".obj",
+      ".tif",
+      ".tiff",
+      ".usd",
+      ".usda",
+      ".usdc",
+      ".usdz"
+    ],
+    "commands": {
+      "rebuildAndValidate": "powershell -ExecutionPolicy Bypass -File tool/build_vr_sanctuary_v3.ps1",
+      "audit": "python tool/vr_sanctuary_v3_pipeline.py --audit",
+      "strictValidation": "python tool/vr_sanctuary_v3_pipeline.py --validate --strict --check-inventory",
+      "refreshInventory": "python tool/vr_sanctuary_v3_pipeline.py --write-inventory",
+      "optimizeGlb": "powershell -ExecutionPolicy Bypass -File tool/optimize_vr_glb.ps1 -InputAsset source.glb -OutputAsset runtime.glb -TextureCodec webp",
+      "buildAnimatedPetals": "powershell -ExecutionPolicy Bypass -File tool/build_vr_sanctuary_v3_petals.ps1",
+      "buildOrganicDetails": "powershell -ExecutionPolicy Bypass -File tool/build_vr_sanctuary_v3_details.ps1",
+      "buildAtmosphere": "powershell -ExecutionPolicy Bypass -File tool/build_vr_sanctuary_v3_atmosphere.ps1"
+    }
+  },
+  "fallback": {
+    "type": "minimal-orientation-floor",
+    "requiresExternalAssets": false,
+    "treeOrder": [
+      "tree/sakura_hero_lod0.glb",
+      "tree/sakura_hero_lod1.glb",
+      "tree/sakura_hero_source.glb",
+      "no-tree neutral foundation"
+    ],
+    "landscapeOrder": [
+      "environment/landscape_quest_lod0.glb",
+      "environment/landscape_quest_lod1.glb",
+      "environment/landscape_high.glb",
+      "minimal orientation floor"
+    ]
+  },
+  "interactionLayers": {
+    "scenery": 0,
+    "interactive": 1,
+    "clinical": 2,
+    "effects": 3
+  },
+  "notes": [
+    "Phase 1 uses the previously integrated sakura because the Quixel Unreal export was intentionally removed from the critical path.",
+    "Phase 2 vendors the exact Three.js runtime locally, enforces source-format and remote-URL restrictions, validates GLB budgets/extensions, and records SHA-256 checksums in a deterministic runtime inventory.",
+    "Phase 3 uses optimized derivatives of assets/new/landscape.glb and a new terrain-following instanced grass renderer; it does not restore the previous procedural ground or grass assets.",
+    "Phase 4 adds renderer-independent, signal-safe coherence smoothing, instanced ground petals, and a lightweight falling-petal renderer; the authored falling_leaves animation remains available for rollback.",
+    "Phase 5 adds optimized, terrain-aligned instanced rocks, flowers, glowing plants, and bushes while preserving the central breathing sightline. Quest includes one distant bush3 and high quality includes two.",
+    "Phase 6 adds a procedural midnight sky, thousands of shader-twinkled stars, GPU-drifting fireflies, an optimized detailed moon with fallback textures, and a coherence-linked optimized aurora. No legacy sky layer is reactivated.",
+    "Phase 7 integrates the breathing pacer into a soft tree-root light ring and adds an XR-only hysteretic Quest quality governor. Clinical state, controls, the sakura, and guidance remain protected at every quality level.",
+    "Phase 8 hardens Quest renderer policy, adaptive foveation, WebGL context recovery, XR start/end cleanup, visibility timing, startup diagnostics, and debug-panel capacity for release validation.",
+    "Phase 9 adds the opt-in branch-aware sakura canopy foundation. It extracts real disconnected blossom-card anchors from the authored GLB, spatially interleaves growth across the canopy, renders at most two instanced dynamic layers, and retains ?canopy=source as the untouched default and automatic failure fallback.",
+    "Phase 10 adds coherence-driven withering and exact-origin shedding. Dynamic blossoms transition toward amber-rose before retracting, accepted clinical decline emits bounded branch-position events, one pooled instanced petal layer carries those petals to the terrain, and larger authored showers occur only during a real decline. Stable low coherence, signal loss, and adaptive-quality changes do not create endless or false snowfall.",
+    "Phase 11 adds the sustained full-bloom payoff. The dynamic canopy fills at up to 25 percent of tier capacity per second, the real authored blossom cards unfold geometrically over four seconds into a pearl-pink peak layer, falling petals are suppressed, and the existing canopy fill light performs one restrained four-second warm-gold pulse per latch entry.",
+    "Phase 12 completes the canopy production rollout. Branch-aware mode is now the default with ?canopy=source retained as an instant rollback; persistent canopy density is independent of the reduced-particles toggle; reduced motion limits sway and opening rotation; and adaptive-quality retractions are mathematically separated from coherence-authorized petal shedding.",
+    "Phase 13 adds release validation and Quest profiling. The explicit ?canopyTest=cycle demo path deterministically exercises sparse, growth, full-bloom, wither, and recovery states; canopy transitions report frame-cost diagnostics; runtime integrity violations automatically restore the source canopy; and live host data always remains authoritative.",
+    "Phase 14 hardens Quest rendering budgets with progressively distributed authored grass, pooled petal instancing, adaptive optional details, and reproducible ?perfTier=full|balanced|protected profiling without changing clinical state. Phase 16 restores dense Quest meadow coverage at 200,000/3.312M deliberately overlapping grass instances.",
+    "Phase 15 removes avoidable frame-loop work. Sanctuary diagnostics are sampled at 4 Hz only while visible, adaptive instance ranges use stable two-percent buckets, inactive petal pools perform no GPU buffer uploads, and Quest grass and organic details use texture-preserving Lambert shading while high quality retains PBR.",
+    "Phase 16 corrects the visible sakura regressions. The generic green polygon layer is no longer rendered, so only branch-aware pink blossoms grow and wither; falling effects use curved notched sakura-petal geometry rather than opaque square atlas cards; and Quest grass returns to 200,000 overlapping authored clumps for complete meadow coverage.",
+    "Phase 17 locks a denser 300,000-instance Quest meadow independently of coherence and adaptive quality, remaps the authored terrain to moss green while preserving texture relief, restores detailed lunar PBR contrast, removes the duplicate canopy smoothing stage, and replaces ambiguous overlapping VR controls with large state-aware targets, haptics, command acknowledgement, visible setup errors, and a high-contrast breathing instruction panel.",
+    "Phase 18 leaves protocol, duration, display, and comfort setup outside immersive VR; the headset retains only Start, Pause, Resume, and Stop. Accepted coherence direction now biases branch-aware blossom growth and withering immediately, shared exercise audio cues follow every VR breathing phase, and the Quest render path targets an 80 Hz floor with 96,000 wider grass clumps, 0.78 framebuffer scale, stronger foveation, and faster quality protection.",
+    "Visual polish v10 extracts three intact thin variants from the supplied Animated+Grass.glb for dense stratified coverage, raises visible landscape relief, keeps all sakura canopy sections rose-pink, splits glowing plants into green leaves and purple orbs, increases every requested ground-detail family, and gives stars and fireflies deep independent blink cycles.",
+    "Visual polish v11 applies a post-lighting bright-rose floor to every blossom fragment, raises Quest grass from 92,000 to 225,000 deliberately overlapping instances, and raises Quest stars from 7,600 to 18,000 while retaining adaptive abundance protection.",
+    "Visual correction v12 removes all generated sakura canopy copies and recoloring so the original GLB renders once, turns the supplied landscape mountain toward the forward horizon with 68 percent relief, raises Quest grass to 400,000 instances with cached terrain normals, and raises Quest stars to 50,000.",
+    "Visual integration v13 converts the supplied falling_leaves.glb to a locally bundled WebP glTF while preserving its complete 10-second skeletal animation. Phase 16 keeps it as a disabled rollback asset because its silhouette is not sakura-specific and uses curved instanced sakura-petal geometry in production.",
+    "Visual correction v14 reduces each authored falling leaf to 22 percent scale, confines the animation beneath the sakura canopy, replaces the dark source diffuse color with luminous sakura pink, and maps falling abundance and speed inversely to coherence with a hard zero at 100 percent.",
+    "Visual correction v15 replaces ineffective skinned-mesh transform scaling with an 18 percent local geometry reduction and moves the complete falling-leaf volume two meters behind the sakura trunk, preserving the authored skeletal paths while making the petals substantially smaller on screen.",
+    "The existing WebXR bridge, controls, comfort settings, session lifecycle, and TreeVitalityState remain host-owned.",
+    "Use ?scene=v2 only as a temporary rollback while Sanctuary V3 is under construction."
+  ]
+}

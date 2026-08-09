@@ -1,0 +1,12 @@
+targets:
+  $default:
+    sources:
+      include:
+        - lib/**
+        - test/**
+        - web/**
+        - $package$
+      exclude:
+        - lib/graphify-out/**
+        - graphify-out/**
+        - build/**

@@ -1,0 +1,508 @@
+{
+  "version": 18,
+  "assetPackage": "scene_v2",
+  "primaryScene": "coherence_sakura_night_clearing",
+  "generatedBy": "BreathState local Quest/WebXR scene pipeline",
+  "license": "Mixed local project assets. Keep source, license, and attribution records updated when replacing or adding third-party assets.",
+  "targetRuntime": {
+    "device": "Meta Quest 3S",
+    "renderer": "Three.js WebGLRenderer",
+    "refreshTargetHz": "72/80",
+    "defaultQuality": "quest"
+  },
+  "runtimeProfiles": {
+    "quest": {
+      "default": true,
+      "assetProfile": "quest",
+      "texturePreference": [
+        "ktx2",
+        "webp",
+        "source"
+      ],
+      "tree": {
+        "lod0": "sakura_quest_lod0.glb",
+        "lod1": "sakura_quest_lod1.glb",
+        "sourceFallback": "sakura.glb"
+      },
+      "moon": {
+        "runtime": "../new/Moon.fbx",
+        "runtimeBackup": "../new/moon.glb",
+        "surfaceTexture": "../new/8k_moon.jpg",
+        "optimized": "moon_quest.glb",
+        "sourceFallback": "moon.glb",
+        "textureFallbacks": [
+          "moon_albedo.webp",
+          "moon_normal.webp"
+        ]
+      },
+      "aurora": {
+        "runtime": "disabled",
+        "sourceOnly": "aurora.glb",
+        "optimizedSourceOnly": "aurora_quest.glb"
+      },
+      "sky": {
+        "runtime": "procedural-twinkling-stars",
+        "starCountQuest": 9000,
+        "starCountHigh": 14000,
+        "twinkleRuntime": "shader-per-star-slow-wink",
+        "disabledModelOptimized": "night_sky_quest.glb",
+        "sourceHighQuality": "not-bundled",
+        "sourceFallback": "sky_gradient.webp"
+      },
+      "fireflies": {
+        "runtime": "shader-radial-glow-points",
+        "countQuest": 720,
+        "countHigh": 960,
+        "color": "warm-amber-gold",
+        "motion": "slow-brownian-drift",
+        "breathSync": "brighter-on-inhale",
+        "comfortPolicy": "reducedParticles lowers draw range; reducedMotion slows drift and twinkle."
+      },
+      "atmosphere": {
+        "runtime": "coherence-fog-sky-gradient",
+        "fogDensityRange": [
+          0.027,
+          0.041
+        ],
+        "lowCoherenceFog": "0x09141f",
+        "highCoherenceFog": "0x241d34",
+        "horizonBlend": "shader-horizon-mist",
+        "assetPolicy": "No runtime asset loads; use Three.FogExp2 plus the procedural sky shader."
+      },
+      "textures": {
+        "sakuraBlossom": [
+          "sakura_blossom_atlas.ktx2",
+          "sakura_blossom_atlas.webp"
+        ],
+        "sakuraPetal": [
+          "sakura_petal_particle.ktx2",
+          "sakura_petal_particle.webp"
+        ]
+      },
+      "grass": {
+        "runtime": "procedural-hyperreal-lawn",
+        "sourceGlb": "../new/Animated+Grass.glb",
+        "animationSource": "../new/Animated+Grass.fbx",
+        "sourceBlend": "../new/Animated+Grass.blend",
+        "sourceObj": "../new/Animated+Grass.obj",
+        "fallback": "plain textured ground remains visible"
+      },
+      "bushes": {
+        "runtime": [
+          "../new/bush1.glb",
+          "../new/bush2.glb",
+          "../new/bush4.glb",
+          "../new/bush5.glb"
+        ],
+        "highQualityOnly": "../new/bush3.glb",
+        "clusterCount": 25
+      },
+      "organicGroundDetails": {
+        "rocks": [
+          "../new/rock1.glb",
+          "../new/rock2.glb",
+          "../new/rock3.glb",
+          "../new/rock_pack.glb"
+        ],
+        "petals": [
+          "../new/cherry_petals2.glb"
+        ],
+        "highQualityPetals": "../new/cherry_petals1.glb",
+        "flowers": [
+          "../new/lavender.glb",
+          "../new/chamomile.glb",
+          "../new/glowing_plants.glb"
+        ],
+        "rockCount": 12,
+        "petalPatchCountQuest": 18,
+        "petalPatchCountHigh": 26,
+        "flowerPatchCount": 14,
+        "runtimePolicy": "Layered on top of existing grass/bushes. Keep center sightline and VR controls clear."
+      },
+      "sanctuaryBorder": {
+        "runtime": [
+          "../new/pine_tree1.glb",
+          "../new/pine_tree2.glb",
+          "../new/hill.glb"
+        ],
+        "pineCount": 360,
+        "hillCount": 28,
+        "hillRuntime": "hill-glb-with-procedural-fallback"
+      }
+    },
+    "high": {
+      "assetProfile": "source",
+      "texturePreference": [
+        "source",
+        "webp"
+      ],
+      "tree": {
+        "source": "sakura.glb"
+      },
+      "moon": {
+        "runtime": "../new/Moon.fbx",
+        "runtimeBackup": "../new/moon.glb",
+        "surfaceTexture": "../new/8k_moon.jpg",
+        "source": "moon.glb"
+      },
+      "aurora": {
+        "runtime": "disabled",
+        "sourceOnly": "aurora.glb"
+      },
+      "sky": {
+        "runtime": "procedural-twinkling-stars",
+        "twinkleRuntime": "shader-per-star-slow-wink",
+        "sourceOnly": "not-bundled",
+        "disabledModelSource": "not-bundled",
+        "sourceFallback": "sky_gradient.webp"
+      },
+      "fireflies": {
+        "runtime": "shader-radial-glow-points",
+        "countQuest": 720,
+        "countHigh": 960,
+        "color": "warm-amber-gold",
+        "motion": "slow-brownian-drift",
+        "breathSync": "brighter-on-inhale",
+        "comfortPolicy": "reducedParticles lowers draw range; reducedMotion slows drift and twinkle."
+      },
+      "atmosphere": {
+        "runtime": "coherence-fog-sky-gradient",
+        "fogDensityRange": [
+          0.027,
+          0.041
+        ],
+        "lowCoherenceFog": "0x09141f",
+        "highCoherenceFog": "0x241d34",
+        "horizonBlend": "shader-horizon-mist",
+        "assetPolicy": "No runtime asset loads; use Three.FogExp2 plus the procedural sky shader."
+      },
+      "grass": {
+        "runtime": "procedural-hyperreal-lawn",
+        "sourceGlb": "../new/Animated+Grass.glb",
+        "animationSource": "../new/Animated+Grass.fbx",
+        "sourceBlend": "../new/Animated+Grass.blend",
+        "sourceObj": "../new/Animated+Grass.obj"
+      },
+      "bushes": {
+        "runtime": [
+          "../new/bush1.glb",
+          "../new/bush2.glb",
+          "../new/bush3.glb",
+          "../new/bush4.glb",
+          "../new/bush5.glb"
+        ],
+        "clusterCount": 25
+      },
+      "organicGroundDetails": {
+        "rocks": [
+          "../new/rock1.glb",
+          "../new/rock2.glb",
+          "../new/rock3.glb",
+          "../new/rock_pack.glb"
+        ],
+        "petals": [
+          "../new/cherry_petals1.glb",
+          "../new/cherry_petals2.glb"
+        ],
+        "flowers": [
+          "../new/lavender.glb",
+          "../new/chamomile.glb",
+          "../new/glowing_plants.glb"
+        ],
+        "rockCount": 12,
+        "petalPatchCount": 26,
+        "flowerPatchCount": 14,
+        "runtimePolicy": "Layered on top of existing grass/bushes. Keep center sightline and VR controls clear."
+      },
+      "sanctuaryBorder": {
+        "runtime": [
+          "../new/pine_tree1.glb",
+          "../new/pine_tree2.glb",
+          "../new/hill.glb"
+        ],
+        "pineCount": 520,
+        "hillCount": 36,
+        "hillRuntime": "hill-glb-with-procedural-fallback"
+      }
+    }
+  },
+  "sourceAssets": {
+    "tree": "sakura.glb",
+    "moonRuntime": "../new/Moon.fbx",
+    "moonRuntimeBackup": "../new/moon.glb",
+    "moonSurfaceTexture": "../new/8k_moon.jpg",
+    "moon": "moon.glb",
+    "aurora": "aurora.glb",
+    "sakuraReferences": "sakura",
+    "grassRuntimeGlb": "../new/Animated+Grass.glb",
+    "grassAnimationFbx": "../new/Animated+Grass.fbx",
+    "grassBlendSource": "../new/Animated+Grass.blend",
+    "grassObjSource": "../new/Animated+Grass.obj",
+    "bushes": [
+      "../new/bush1.glb",
+      "../new/bush2.glb",
+      "../new/bush3.glb",
+      "../new/bush4.glb",
+      "../new/bush5.glb"
+    ],
+    "organicGroundDetails": [
+      "../new/rock1.glb",
+      "../new/rock2.glb",
+      "../new/rock3.glb",
+      "../new/rock_pack.glb",
+      "../new/cherry_petals1.glb",
+      "../new/cherry_petals2.glb",
+      "../new/lavender.glb",
+      "../new/chamomile.glb",
+      "../new/glowing_plants.glb"
+    ],
+    "sanctuaryPines": [
+      "../new/pine_tree1.glb",
+      "../new/pine_tree2.glb"
+    ],
+    "sanctuaryHill": "../new/hill.glb"
+  },
+  "generatedAssets": {
+    "current": [
+      "sakura_quest_lod0.glb",
+      "sakura_quest_lod1.glb",
+      "moon_quest.glb",
+      "aurora_quest.glb",
+      "nightsky_quest.webp",
+      "night_sky_quest.glb",
+      "sakura_blossom_atlas.ktx2",
+      "sakura_blossom_atlas.webp",
+      "sakura_petal_particle.ktx2",
+      "sakura_petal_particle.webp",
+      "sakura_ground_ao.webp",
+      "sakura_canopy_shadow.webp",
+      "moon_albedo.webp",
+      "moon_normal.webp",
+      "sky_gradient.webp"
+    ],
+    "planned": []
+  },
+  "runtimeDecoders": {
+    "basis": [
+      "../../libs/basis/basis_transcoder.js",
+      "../../libs/basis/basis_transcoder.wasm"
+    ],
+    "draco": [
+      "../../libs/draco/gltf/draco_decoder.js",
+      "../../libs/draco/gltf/draco_decoder.wasm",
+      "../../libs/draco/gltf/draco_wasm_wrapper.js"
+    ],
+    "meshopt": "three/addons/libs/meshopt_decoder.module.js"
+  },
+  "fallbackOrder": [
+    "quest optimized GLB plus KTX2 textures",
+    "quest optimized GLB plus WebP textures",
+    "source GLB plus source/WebP textures",
+    "procedural fallback scene"
+  ],
+  "assetBudgets": {
+    "sakuraTree": {
+      "lod0MaxTriangles": 12000,
+      "lod1MaxTriangles": 5000,
+      "lod0MaxBytes": 8388608,
+      "lod1MaxBytes": 4194304
+    },
+    "moon": {
+      "runtimeFbxMaxBytes": 524288,
+      "backupGlbMaxBytes": 8388608,
+      "textureMaxResolution": 8192
+    },
+    "aurora": {
+      "maxBytes": 2097152
+    },
+    "nightSky": {
+      "questMaxBytes": 4194304,
+      "questTargetResolution": "4096x2048",
+      "modelMaxBytes": 2097152,
+      "highQualitySource": "not-bundled"
+    },
+    "fireflies": {
+      "runtimePolicy": "Use a single ShaderMaterial Points draw call with circular radial glow in-shader. Quest uses 720 fireflies and high quality uses 960; reduce draw range under reducedParticles."
+    },
+    "atmosphere": {
+      "runtimePolicy": "Use procedural shader horizon mist and Three.FogExp2 only. Low coherence uses denser midnight-teal fog; high coherence softens density and shifts toward a quiet violet/lavender horizon."
+    },
+    "textures": {
+      "treeBarkMaxResolution": 2048,
+      "blossomMaxResolution": 2048,
+      "petalParticleMaxResolution": 512
+    },
+    "grass": {
+      "runtimeGlbMaxBytes": 8388608,
+      "animationFbxMaxBytes": 5242880,
+      "blendSourceMaxBytes": 20971520,
+      "runtimePolicy": "Use a procedural hyperreal lawn over a textured plain ground for full coverage. Use Animated+Grass.glb and Animated+Grass.obj as small near-field accent geometry sources, Animated+Grass.fbx as the compatible animation source, and Animated+Grass.blend as the editable master source."
+    },
+    "bushes": {
+      "questRuntimeMaxBytesPerAsset": 10485760,
+      "highOnlyAsset": "../new/bush3.glb",
+      "highOnlyReason": "bush3.glb is about 50 MB and over 1M triangles, so Quest loads it only with quality=high or heavyBushes=1."
+    },
+    "organicGroundDetails": {
+      "questRuntimePolicy": "Load rocks, cherry_petals2, lavender, chamomile, and glowing_plants by default. cherry_petals1 is high quality or heavyDecor=1 because it is about 20 MB.",
+      "rockCount": 12,
+      "flowerPatchCount": 14,
+      "petalPatchCountQuest": 18,
+      "petalPatchCountHigh": 26
+    },
+    "sanctuaryBorder": {
+      "questPineCount": 360,
+      "highPineCount": 520,
+      "questHillCount": 28,
+      "highHillCount": 36,
+      "hillAsset": "../new/hill.glb",
+      "runtimePolicy": "Use pine_tree1.glb and pine_tree2.glb as shared dense distant sources plus many overlapping hill.glb clones as a continuous hill range with procedural fallback. All pines use the same subtle green tint. Hill clones are lifted, widened, and placed closer to remain visible above the grass horizon."
+    }
+  },
+  "materialProfiles": {
+    "sakuraBlossoms": {
+      "rendererPath": "MeshStandardMaterial.onBeforeCompile",
+      "preservePbrLighting": true,
+      "runtimeInputs": [
+        "uTreeVitality",
+        "uWitherAmount",
+        "uWindStrength",
+        "blossomSeed"
+      ],
+      "coherenceBehavior": "High coherence increases pale pink/white blossom lift, subtle emissive warmth, and fuller draw range; low coherence shifts gradually toward amber/dry petals with smoother thinning."
+    },
+    "grassGlbField": {
+      "runtimeFiles": [
+        "../new/Animated+Grass.glb"
+      ],
+      "animationSource": "../new/Animated+Grass.fbx",
+      "sourceFile": "../new/Animated+Grass.blend",
+      "rendererPath": "InstancedMesh procedural blade clumps plus generated ground color/bump textures, GLB/OBJ near-field accent meshes, FBX animation extraction, and MeshStandardMaterial.onBeforeCompile wind shader",
+      "coverage": "A plain circular ground uses generated grass albedo/bump textures for continuous coverage, while an ultra-dense jittered-grid field covers the full visible ground with overlapping upright clumps: roughly 246k visible clumps on Quest and 418k on high quality. Animated+Grass.glb and Animated+Grass.obj are used only as small accent geometry, not tiled as terrain, because full-field tiling produced warped flat carpet artifacts.",
+      "fallback": "If source GLB/OBJ/FBX assets are unavailable, the procedural lawn and plain textured ground still render.",
+      "comfortBehavior": "reducedMotion lowers grass shader wind strength and extracted FBX clip mixer speed."
+    },
+    "bushAccents": {
+      "runtimeFiles": [
+        "../new/bush1.glb",
+        "../new/bush2.glb",
+        "../new/bush4.glb",
+        "../new/bush5.glb"
+      ],
+      "highQualityFile": "../new/bush3.glb",
+      "rendererPath": "Grounded cloned GLB accents with material tinting, texture anisotropy, alpha test, and subtle coherence-driven emissive bloom.",
+      "placement": "Twenty-five deterministic clusters placed around the clearing and distant grass edges while keeping the tree and control panels unobstructed."
+    },
+    "organicGroundDetails": {
+      "runtimeFiles": [
+        "../new/rock1.glb",
+        "../new/rock2.glb",
+        "../new/rock3.glb",
+        "../new/rock_pack.glb",
+        "../new/cherry_petals2.glb",
+        "../new/lavender.glb",
+        "../new/chamomile.glb",
+        "../new/glowing_plants.glb"
+      ],
+      "highQualityFile": "../new/cherry_petals1.glb",
+      "rendererPath": "Grounded cloned GLB accents with cloned/tinted PBR materials, alpha test, and subtle coherence-driven emissive lift for flowers/glowing plants.",
+      "placement": "Mossy rocks sit around the sakura base and meadow edges; cherry petal patches sit under the canopy; lavender, chamomile, and glowing plants sit in deterministic meadow patches away from the VR controls."
+    },
+    "sanctuaryBorder": {
+      "runtimeFiles": [
+        "../new/pine_tree1.glb",
+        "../new/pine_tree2.glb",
+        "../new/hill.glb"
+      ],
+      "rendererPath": "Shared GLB pine clones with a consistent green fog-reactive matte material plus a dense lifted/scaled belt of hill.glb clones.",
+      "placement": "Pines are distributed in a dense deterministic multi-depth ring roughly 32m-47m from the clearing center so they overlap slightly; hill clones sit closer as a continuous range beneath and between the pine silhouettes."
+    },
+    "atmosphere": {
+      "rendererPath": "Procedural sky shader horizon mist plus Three.FogExp2.",
+      "runtimeInputs": [
+        "treeVitality",
+        "metrics.coherence",
+        "breath.phaseProgress"
+      ],
+      "coherenceBehavior": "Low coherence keeps the horizon darker and fog denser; higher coherence gradually reduces density and warms the horizon toward muted violet/lavender while preserving the midnight scene."
+    },
+    "firefliesAndStars": {
+      "rendererPath": "Procedural star ShaderMaterial plus firefly ShaderMaterial point sprites.",
+      "runtimeInputs": [
+        "breath.phaseProgress",
+        "comfortOptions.reducedMotion",
+        "comfortOptions.reducedParticles",
+        "treeVitality"
+      ],
+      "behavior": "Stars twinkle with slow per-star phase offsets. Fireflies use warm circular glow sprites, Brownian-style drift around the sakura, and inhale-synchronized brightness."
+    }
+  },
+  "profiling": {
+    "debugQueryParams": [
+      "debug=1",
+      "profile=1"
+    ],
+    "recommendedQuestUrlSuffix": "?quality=quest&debug=1",
+    "runtimeMetrics": [
+      "assetLoadMs",
+      "assetStatus",
+      "assetProfile",
+      "textureProfile",
+      "skyProfile",
+      "grassProfile",
+      "forestProfile",
+      "groundDetailProfile",
+      "atmosphereProfile",
+      "fogDensity",
+      "activeTreeLod",
+      "drawCalls",
+      "triangles",
+      "geometries",
+      "textures",
+      "programs",
+      "averageFrameMs",
+      "fps",
+      "slowFrameHints"
+    ],
+    "acceptanceChecklist": [
+      "Cold-load the scene in Quest Browser and confirm assetStatus reaches ready or fallback without a blank scene.",
+      "Enter VR and confirm controller hover/click still works on Start, Pause, Resume, Stop, comfort toggles, Recenter, and Sweep.",
+      "Run at least five minutes in quality=quest and confirm the scene feels stable at the headset refresh rate.",
+      "Confirm default Quest sky uses the procedural twinkling-star path and does not load the optimized or source sky assets by default.",
+      "Sustain high and low demo/live coherence and confirm sakura blossoming/withering stays gradual.",
+      "Toggle reducedMotion, reducedParticles, highContrastGuide, and largerText with no overlapping panels."
+    ]
+  },
+  "pipeline": {
+    "script": "tool/vr_scene_asset_pipeline.py",
+    "auditCommand": "python tool/vr_scene_asset_pipeline.py --audit",
+    "validateCommand": "python tool/vr_scene_asset_pipeline.py --validate",
+    "strictValidateCommand": "python tool/vr_scene_asset_pipeline.py --validate --strict",
+    "generationNotes": [
+      "GLBs generated with glTF Transform optimize using meshopt and WebP texture compression.",
+      "KTX2 texture variants generated with basis_universal from WebP-derived PNG intermediates.",
+      "The active Quest sky is procedural: a plain dark sky dome plus thousands of shader-twinkled star points. night_sky_quest.glb, nightsky_quest.webp, and sky_gradient.webp are source/reference fallbacks only.",
+      "sakura_ground_ao.webp and sakura_canopy_shadow.webp are source/reference only in the current plain-ground runtime.",
+      "Phase 4 upgrades the sakura blossom material with PBR-preserving shader hooks and deterministic per-vertex blossom variation.",
+      "Phase 5 adds debug-only Quest profiling for load time, active LOD, sky profile, draw calls, triangles, texture counts, frame timing, and slow-frame hints.",
+      "Grass runtime now uses a generated textured ground plus dense procedural instanced clumps for a natural plain lawn. Animated+Grass.glb and Animated+Grass.obj add near-field accent geometry, Animated+Grass.fbx is used for compatible accent animation extraction, and Animated+Grass.blend remains the editable source.",
+      "Botanical ground accents use bush1, bush2, bush4, and bush5 by default on Quest; bush3 is available in high quality or with heavyBushes=1 because it is substantially heavier.",
+      "Phase 4 adds organic ground details from rock1, rock2, rock3, rock_pack, cherry_petals1/2, lavender, chamomile, and glowing_plants without removing the existing grass, bushes, pines, hills, fireflies, or stars.",
+      "The sanctuary border uses pine_tree1 and pine_tree2 as dense distant forest silhouettes with hill.glb-backed hills to hide the flat horizon.",
+      "Phase 2 of the environmental sanctuary upgrade blends the horizon with procedural sky mist and coherence-linked FogExp2 density/color, with no additional runtime assets.",
+      "Phase 3 replaces square/flat firefly points with warm radial shader sprites, slow Brownian drift, inhale-linked glow, slower per-star twinkling, 9000/14000 procedural stars, and 720/960 fireflies."
+    ],
+    "externalToolsForLaterPhases": [
+      "gltf-transform",
+      "toktx",
+      "Blender"
+    ]
+  },
+  "expectedSakuraNodesOrMaterials": [
+    "Sakura_Bark001_2K_JPG_Mat_0",
+    "Sakura_Sakura_Mat_0",
+    "Bark001_2K_JPG_Mat",
+    "Sakura_Mat"
+  ],
+  "notes": "Phase 2 generated optimized assets and runtime decoders. Phase 3 adds runtime LOD switching. Phase 4 improves blossom material quality while preserving source fallbacks. Phase 5 adds runtime Quest profiling and the final manual acceptance checklist. The current scene uses a plain visible textured ground, dense procedural grass blades, deterministic bush accents from assets/new/bush1-5, organic rock/petal/flower/glowing-plant details from assets/new, a dense distant pine-and-hill sanctuary border from assets/new/pine_tree1, pine_tree2, and hill.glb, coherence-linked FogExp2 plus shader horizon mist to soften the field/sky boundary, warm bioluminescent firefly shader sprites with breathing-linked glow, a higher-right moon loaded primarily from assets/new/Moon.fbx with assets/new/moon.glb as backup, an 8K moon surface texture, and a procedural twinkling-star sky instead of the night-sky GLB/texture layer."
+}
