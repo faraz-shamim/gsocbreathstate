@@ -58,6 +58,11 @@ BreathState solves this by combining sensor streaming, signal alignment, on-devi
 | User workflows | General patient-facing interface | Separate clinician, patient-with-Polar, and patient-without-Polar modes |
 | Immersion | Not available | Two-way Flutter/WebXR bridge and a comfort-aware Meta Quest sanctuary |
 
+<p align="center"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/1.jpeg" width="30%"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/2.jpeg" width="30%"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/3.jpeg" width="30%"> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/4.jpeg" width="30%"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/5.jpeg" width="30%"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/6.jpeg" width="30%"> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/Mr-Imperium/asset/main/7.jpeg" width="30%"> </p>
 ---
 
 ## System architecture
