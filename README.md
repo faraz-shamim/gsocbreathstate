@@ -24,7 +24,7 @@
 
 BreathState is an open-source, local-first application for heart rate and breathing signal acquisition, resonance frequency estimation, and guided biofeedback. Built using Flutter and Dart, it runs cross-platform (mobile, web, and WebXR) without relying on cloud services for data storage or processing.
 
-Building on the initial 2025 prototype—which supported basic Polar H10 tracking, audio-based breathing estimation, and local SQLite storage—my GSoC 2026 project turns BreathState into a complete research platform. 
+Building on the initial 2025 prototype which supported basic Polar H10 tracking, audio-based breathing estimation, and local SQLite storage; my GSoC 2026 project turns BreathState into a complete research platform. 
 
 Key upgrades include:
 - Native and Web Bluetooth support for Polar H10 (HR, R–R, raw ECG, accelerometer) and Vernier GDX-RB respiration belts.
