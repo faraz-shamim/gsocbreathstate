@@ -16,33 +16,77 @@ jobs:
       contents: read
 
     steps:
+      # ------------------------------------------------------------
+      # 1. Checkout repository
+      # ------------------------------------------------------------
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
+      # ------------------------------------------------------------
+      # 2. Install Flutter
+      # ------------------------------------------------------------
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
+      # ------------------------------------------------------------
+      # 3. Display Flutter environment
+      # ------------------------------------------------------------
       - name: Show Flutter version
-        run: flutter --version
-
-      - name: Add macOS platform if missing
         run: |
-          if [ ! -d "macos" ]; then
-            flutter create --platforms=macos .
-          fi
+          flutter --version
+          flutter doctor -v
 
+      # ------------------------------------------------------------
+      # 4. Disable Swift Package Manager
+      #
+      # Your current macOS Xcode project fails Flutter's automatic
+      # SwiftPM migration with:
+      #
+      # Unable to find PBXFrameworksBuildPhase for Runner target
+      #
+      # This makes Flutter use CocoaPods instead.
+      # ------------------------------------------------------------
+      - name: Disable Swift Package Manager
+        run: flutter config --no-enable-swift-package-manager
+
+      # ------------------------------------------------------------
+      # 5. Clean previous Flutter build files
+      # ------------------------------------------------------------
+      - name: Clean Flutter project
+        run: flutter clean
+
+      # ------------------------------------------------------------
+      # 6. Download Dart / Flutter dependencies
+      # ------------------------------------------------------------
       - name: Install dependencies
         run: flutter pub get
 
+      # ------------------------------------------------------------
+      # 7. Build release macOS application
+      # ------------------------------------------------------------
       - name: Build macOS release
         run: flutter build macos --release
 
-      - name: Package .app
+      # ------------------------------------------------------------
+      # 8. Find the generated .app and package it
+      #
+      # Don't hardcode the .app name because the Xcode product name
+      # doesn't necessarily equal the pubspec package name.
+      # ------------------------------------------------------------
+      - name: Package macOS app
+        shell: bash
         run: |
-          APP_PATH=$(find build/macos/Build/Products/Release \
+          set -e
+
+          RELEASE_DIR="build/macos/Build/Products/Release"
+
+          echo "Looking for macOS app in:"
+          echo "$RELEASE_DIR"
+
+          APP_PATH=$(find "$RELEASE_DIR" \
             -maxdepth 1 \
             -type d \
             -name "*.app" \
@@ -50,20 +94,41 @@ jobs:
             -quit)
 
           if [ -z "$APP_PATH" ]; then
-            echo "No .app bundle found"
+            echo "ERROR: No .app bundle was found."
+            echo ""
+            echo "Contents of release directory:"
+            ls -la "$RELEASE_DIR" || true
             exit 1
           fi
 
-          echo "Found app: $APP_PATH"
+          APP_NAME=$(basename "$APP_PATH")
 
-          ditto -c -k \
+          echo "Found application:"
+          echo "$APP_PATH"
+
+          echo "Application name:"
+          echo "$APP_NAME"
+
+          # ditto is preferred on macOS for packaging .app bundles.
+          ditto \
+            -c \
+            -k \
             --sequesterRsrc \
             --keepParent \
             "$APP_PATH" \
-            macos-app.zip
+            "breath-state-macos.zip"
 
+          echo ""
+          echo "Created:"
+          ls -lh "breath-state-macos.zip"
+
+      # ------------------------------------------------------------
+      # 9. Upload resulting ZIP to GitHub Actions
+      # ------------------------------------------------------------
       - name: Upload macOS app
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
-          path: macos-app.zip
-          archive: false
+          name: breath-state-macos
+          path: breath-state-macos.zip
+          if-no-files-found: error
+          retention-days: 7
