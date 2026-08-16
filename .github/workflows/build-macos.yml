@@ -16,75 +16,69 @@ jobs:
       contents: read
 
     steps:
-      # ------------------------------------------------------------
-      # 1. Checkout repository
-      # ------------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ------------------------------------------------------------
-      # 2. Install Flutter
-      # ------------------------------------------------------------
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
-      # ------------------------------------------------------------
-      # 3. Display Flutter environment
-      # ------------------------------------------------------------
       - name: Show Flutter version
         run: |
           flutter --version
           flutter doctor -v
 
-      # ------------------------------------------------------------
-      # 4. Disable Swift Package Manager
-      #
-      # Your current macOS Xcode project fails Flutter's automatic
-      # SwiftPM migration with:
-      #
-      # Unable to find PBXFrameworksBuildPhase for Runner target
-      #
-      # This makes Flutter use CocoaPods instead.
-      # ------------------------------------------------------------
+      # location currently requires CocoaPods on macOS,
+      # so disable Flutter's SwiftPM migration for this build.
       - name: Disable Swift Package Manager
         run: flutter config --no-enable-swift-package-manager
 
-      # ------------------------------------------------------------
-      # 5. Clean previous Flutter build files
-      # ------------------------------------------------------------
       - name: Clean Flutter project
         run: flutter clean
 
-      # ------------------------------------------------------------
-      # 6. Download Dart / Flutter dependencies
-      # ------------------------------------------------------------
-      - name: Install dependencies
+      - name: Install Flutter dependencies
         run: flutter pub get
 
-      # ------------------------------------------------------------
-      # 7. Build release macOS application
-      # ------------------------------------------------------------
+      # Remove any stale CocoaPods output from an earlier project state.
+      - name: Clean CocoaPods
+        run: |
+          rm -rf macos/Pods
+          rm -f macos/Podfile.lock
+
+      # Generate CocoaPods support files, including:
+      # Pods-Runner.release.xcconfig
+      # Pods-Runner-frameworks-Release-input-files.xcfilelist
+      # Pods-Runner-frameworks-Release-output-files.xcfilelist
+      - name: Install CocoaPods dependencies
+        working-directory: macos
+        run: |
+          pod install --repo-update
+
+      # Useful diagnostics. These should all exist before Xcode builds.
+      - name: Verify CocoaPods files
+        run: |
+          echo "=== Pods Runner support directory ==="
+          ls -la "macos/Pods/Target Support Files/Pods-Runner"
+
+          echo ""
+          echo "=== Release xcconfig ==="
+          cat "macos/Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+
+          echo ""
+          echo "=== Flutter Release config ==="
+          cat "macos/Flutter/Flutter-Release.xcconfig"
+
       - name: Build macOS release
         run: flutter build macos --release
 
-      # ------------------------------------------------------------
-      # 8. Find the generated .app and package it
-      #
-      # Don't hardcode the .app name because the Xcode product name
-      # doesn't necessarily equal the pubspec package name.
-      # ------------------------------------------------------------
       - name: Package macOS app
         shell: bash
         run: |
           set -e
 
           RELEASE_DIR="build/macos/Build/Products/Release"
-
-          echo "Looking for macOS app in:"
-          echo "$RELEASE_DIR"
 
           APP_PATH=$(find "$RELEASE_DIR" \
             -maxdepth 1 \
@@ -94,22 +88,15 @@ jobs:
             -quit)
 
           if [ -z "$APP_PATH" ]; then
-            echo "ERROR: No .app bundle was found."
-            echo ""
-            echo "Contents of release directory:"
+            echo "ERROR: No .app bundle found."
+            echo "Release directory contents:"
             ls -la "$RELEASE_DIR" || true
             exit 1
           fi
 
-          APP_NAME=$(basename "$APP_PATH")
-
-          echo "Found application:"
+          echo "Found app:"
           echo "$APP_PATH"
 
-          echo "Application name:"
-          echo "$APP_NAME"
-
-          # ditto is preferred on macOS for packaging .app bundles.
           ditto \
             -c \
             -k \
@@ -118,13 +105,8 @@ jobs:
             "$APP_PATH" \
             "breath-state-macos.zip"
 
-          echo ""
-          echo "Created:"
-          ls -lh "breath-state-macos.zip"
+          ls -lh breath-state-macos.zip
 
-      # ------------------------------------------------------------
-      # 9. Upload resulting ZIP to GitHub Actions
-      # ------------------------------------------------------------
       - name: Upload macOS app
         uses: actions/upload-artifact@v4
         with:
