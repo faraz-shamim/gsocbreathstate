@@ -170,7 +170,6 @@ class _QuickRfAssessmentScreenState extends State<QuickRfAssessmentScreen> {
                             child: ContentContainer(
                               child: _ResultCard(
                                 result: visibleResult,
-                                patientAge: patient.age,
                                 isSaving: _isSaving,
                                 isSaved: _isSaved,
                                 onSave: _saveEstimate,
@@ -213,20 +212,19 @@ class _FormulaCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hasuo et al. Model 3',
+            'Hasuo et al. Model',
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(
-            'Uses only sex and height, exactly as specified by the '
-            'paper’s adopted estimation model.',
+            'Uses only sex and height. ',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 16),
           _InputRow(
-            label: 'Sex used by formula',
+            label: 'Sex',
             value: formulaSex?.displayName ?? patient.sex ?? 'Not specified',
             isValid: formulaSex != null,
           ),
@@ -246,18 +244,6 @@ class _FormulaCard extends StatelessWidget {
           Text(
             'Female: 15.88 − 0.06 × height(cm)',
             style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Hasuo et al., Applied Psychophysiology and Biofeedback 49, '
-            '125–132 (2024). DOI: ${RfPredictor.doi}',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Development and validation participants were adults aged '
-            '20–85 years.',
-            style: Theme.of(context).textTheme.bodySmall,
           ),
           if (error != null) ...[
             const SizedBox(height: 14),
@@ -280,7 +266,7 @@ class _FormulaCard extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: onEstimate,
               icon: const Icon(Icons.calculate_outlined),
-              label: const Text('Calculate Hasuo estimate'),
+              label: const Text('Calculate estimate'),
             ),
           ),
         ],
@@ -327,14 +313,12 @@ class _InputRow extends StatelessWidget {
 
 class _ResultCard extends StatelessWidget {
   final RfPredictionResult result;
-  final int? patientAge;
   final bool isSaving;
   final bool isSaved;
   final VoidCallback onSave;
 
   const _ResultCard({
     required this.result,
-    required this.patientAge,
     required this.isSaving,
     required this.isSaved,
     required this.onSave,
@@ -342,11 +326,6 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isOutsideStudyAge =
-        patientAge != null && (patientAge! < 20 || patientAge! > 85);
-    final applicationBlocked =
-        result.isOutsideMeasuredRateRange || isOutsideStudyAge;
-
     return GlassCard(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -366,17 +345,6 @@ class _ResultCard extends StatelessWidget {
               fontWeight: FontWeight.w900,
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            '${result.equation} = ${result.estimatedBpm.toStringAsFixed(2)}',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Adjusted R² ${result.adjustedRSquared.toStringAsFixed(2)} · '
-            '${result.modelVersion}',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
           const SizedBox(height: 14),
           ...result.warnings.map(
             (warning) => Padding(
@@ -395,33 +363,12 @@ class _ResultCard extends StatelessWidget {
               ),
             ),
           ),
-          if (isOutsideStudyAge)
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    size: 16,
-                    color: AppTheme.coralRose,
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'The patient is outside the paper’s 20–85 year study '
-                      'population, so this estimate cannot be applied.',
-                    ),
-                  ),
-                ],
-              ),
-            ),
           const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed:
-                  isSaving || isSaved || applicationBlocked ? null : onSave,
+                  isSaving || isSaved ? null : onSave,
               icon:
                   isSaving
                       ? const SizedBox(
@@ -439,8 +386,6 @@ class _ResultCard extends StatelessWidget {
                     ? 'Saving'
                     : isSaved
                     ? 'Estimate saved'
-                    : applicationBlocked
-                    ? 'Outside source-study limits'
                     : 'Save estimate to patient',
               ),
             ),

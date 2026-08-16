@@ -1,0 +1,69 @@
+name: Build macOS App
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Add macOS platform if missing
+        run: |
+          if [ ! -d "macos" ]; then
+            flutter create --platforms=macos .
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build macOS release
+        run: flutter build macos --release
+
+      - name: Package .app
+        run: |
+          APP_PATH=$(find build/macos/Build/Products/Release \
+            -maxdepth 1 \
+            -type d \
+            -name "*.app" \
+            -print \
+            -quit)
+
+          if [ -z "$APP_PATH" ]; then
+            echo "No .app bundle found"
+            exit 1
+          fi
+
+          echo "Found app: $APP_PATH"
+
+          ditto -c -k \
+            --sequesterRsrc \
+            --keepParent \
+            "$APP_PATH" \
+            macos-app.zip
+
+      - name: Upload macOS app
+        uses: actions/upload-artifact@v7
+        with:
+          path: macos-app.zip
+          archive: false

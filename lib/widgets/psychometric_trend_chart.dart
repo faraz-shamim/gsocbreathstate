@@ -34,6 +34,10 @@ class HrvCoherenceTrendPoint {
 }
 
 class PsychometricTrendChart extends StatelessWidget {
+  static const Duration _visibleWindow = Duration(days: 45);
+  static const int _maxPsychometricPoints = 30;
+  static const int _maxHrvPoints = 30;
+
   final PsychometricScaleType? scaleType;
   final int maxScaleScore;
   final List<PsychometricTrendPoint> psychometricPoints;
@@ -49,13 +53,36 @@ class PsychometricTrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final points =
+    final allPsychometricPoints =
         psychometricPoints
             .where((point) => scaleType == null || point.scaleType == scaleType)
             .toList()
           ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    final hrv = List<HrvCoherenceTrendPoint>.from(hrvPoints)
+    final allHrvPoints = List<HrvCoherenceTrendPoint>.from(hrvPoints)
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    final latestTimestamp = <DateTime>[
+      if (allPsychometricPoints.isNotEmpty)
+        allPsychometricPoints.last.timestamp,
+      if (allHrvPoints.isNotEmpty) allHrvPoints.last.timestamp,
+    ].fold<DateTime?>(
+      null,
+      (latest, value) =>
+          latest == null || value.isAfter(latest) ? value : latest,
+    );
+    final cutoff = latestTimestamp?.subtract(_visibleWindow);
+    final points = _mostRecent(
+      allPsychometricPoints.where(
+        (point) => cutoff == null || !point.timestamp.isBefore(cutoff),
+      ),
+      _maxPsychometricPoints,
+    );
+    final hrv = _mostRecent(
+      allHrvPoints.where(
+        (point) => cutoff == null || !point.timestamp.isBefore(cutoff),
+      ),
+      _maxHrvPoints,
+    );
 
     if (points.isEmpty && hrv.isEmpty) {
       return SizedBox(
@@ -287,6 +314,12 @@ class PsychometricTrendChart extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<T> _mostRecent<T>(Iterable<T> values, int maximum) {
+    final points = values.toList();
+    if (points.length <= maximum) return points;
+    return points.sublist(points.length - maximum);
   }
 
   LineChartBarData _scaleBar(_ScaleSeries series, bool isDark) {

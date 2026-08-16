@@ -101,15 +101,14 @@ class RfPredictor {
     final formulaSex = HasuoFormulaSex.tryParse(input.sex);
     if (formulaSex == null) {
       throw const RfPredictionInputException(
-        'Hasuo Model 3 requires sex recorded as Male or Female because the '
-        'paper publishes separate equations for those two groups.',
+        'Model requires sex recorded as Male or Female. ',
       );
     }
 
     final heightCm = input.heightCm;
     if (heightCm == null || !heightCm.isFinite || heightCm <= 0) {
       throw const RfPredictionInputException(
-        'Hasuo Model 3 requires a valid height in centimeters.',
+        'Model requires a valid height in centimeters.',
       );
     }
 
@@ -131,14 +130,6 @@ class RfPredictor {
     final warnings = <String>[
       'This is a sex-and-height estimate, not a physiological RF '
           'measurement.',
-      'The source model explained ${(adjustedRSquared * 100).round()}% of '
-          'variance in its healthy-volunteer development sample.',
-      if (estimatedBpm < measuredRateMinimumBpm ||
-          estimatedBpm > measuredRateMaximumBpm)
-        'This estimate is outside the 5.0–7.0 BPM paced rates evaluated in '
-            'the source study.',
-      'In the incurable-cancer sample, the formula tended to estimate '
-          'slightly high when measured RF was 6 BPM or lower.',
     ];
 
     return RfPredictionResult(
