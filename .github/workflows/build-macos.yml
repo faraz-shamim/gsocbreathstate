@@ -16,69 +16,172 @@ jobs:
       contents: read
 
     steps:
+      # ------------------------------------------------------------
+      # 1. Checkout repository
+      # ------------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ------------------------------------------------------------
+      # 2. Install Flutter
+      # ------------------------------------------------------------
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
+      # ------------------------------------------------------------
+      # 3. Show Flutter environment
+      # ------------------------------------------------------------
       - name: Show Flutter version
         run: |
           flutter --version
           flutter doctor -v
 
-      # location currently requires CocoaPods on macOS,
-      # so disable Flutter's SwiftPM migration for this build.
+      # ------------------------------------------------------------
+      # 4. Disable Swift Package Manager
+      #
+      # Required for now because the location plugin in this project
+      # does not support SwiftPM on macOS.
+      # ------------------------------------------------------------
       - name: Disable Swift Package Manager
         run: flutter config --no-enable-swift-package-manager
 
+      # ------------------------------------------------------------
+      # 5. Clean Flutter project
+      # ------------------------------------------------------------
       - name: Clean Flutter project
         run: flutter clean
 
+      # ------------------------------------------------------------
+      # 6. Install Dart / Flutter dependencies
+      # ------------------------------------------------------------
       - name: Install Flutter dependencies
         run: flutter pub get
 
-      # Remove any stale CocoaPods output from an earlier project state.
+      # ------------------------------------------------------------
+      # 7. Remove stale CocoaPods files
+      # ------------------------------------------------------------
       - name: Clean CocoaPods
         run: |
           rm -rf macos/Pods
           rm -f macos/Podfile.lock
 
-      # Generate CocoaPods support files, including:
-      # Pods-Runner.release.xcconfig
-      # Pods-Runner-frameworks-Release-input-files.xcfilelist
-      # Pods-Runner-frameworks-Release-output-files.xcfilelist
+      # ------------------------------------------------------------
+      # 8. Install CocoaPods dependencies
+      # ------------------------------------------------------------
       - name: Install CocoaPods dependencies
         working-directory: macos
         run: |
           pod install --repo-update
 
-      # Useful diagnostics. These should all exist before Xcode builds.
+      # ------------------------------------------------------------
+      # 9. Verify CocoaPods generated the required Runner files
+      # ------------------------------------------------------------
       - name: Verify CocoaPods files
+        shell: bash
         run: |
-          echo "=== Pods Runner support directory ==="
+          set -e
+
+          echo "========================================"
+          echo "Pods-Runner support files"
+          echo "========================================"
+
           ls -la "macos/Pods/Target Support Files/Pods-Runner"
 
           echo ""
-          echo "=== Release xcconfig ==="
-          cat "macos/Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+          echo "========================================"
+          echo "Runner Release xcconfig"
+          echo "========================================"
+
+          cat "macos/Runner/Configs/Release.xcconfig"
 
           echo ""
-          echo "=== Flutter Release config ==="
+          echo "========================================"
+          echo "Flutter Release xcconfig"
+          echo "========================================"
+
           cat "macos/Flutter/Flutter-Release.xcconfig"
 
+          echo ""
+          echo "========================================"
+          echo "Pods Release xcconfig"
+          echo "========================================"
+
+          cat "macos/Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+
+      # ------------------------------------------------------------
+      # 10. Verify Xcode actually inherits PODS_ROOT
+      #
+      # The previous failure:
+      #
+      # /Target Support Files/Pods-Runner/...
+      #
+      # means PODS_ROOT was empty.
+      # ------------------------------------------------------------
+      - name: Verify PODS_ROOT
+        shell: bash
+        run: |
+          set -e
+
+          echo "Checking Xcode build settings..."
+
+          xcodebuild \
+            -workspace macos/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -showBuildSettings \
+            > /tmp/build-settings.txt
+
+          echo ""
+          echo "PODS_ROOT entries:"
+          grep "PODS_ROOT" /tmp/build-settings.txt || true
+
+          PODS_ROOT_VALUE=$(
+            grep -m1 -E '^[[:space:]]*PODS_ROOT = ' /tmp/build-settings.txt \
+            | sed 's/^[[:space:]]*PODS_ROOT = //'
+          )
+
+          echo ""
+          echo "Resolved PODS_ROOT:"
+          echo "$PODS_ROOT_VALUE"
+
+          if [ -z "$PODS_ROOT_VALUE" ]; then
+            echo ""
+            echo "ERROR: PODS_ROOT is empty."
+            echo "CocoaPods configuration is not being inherited by Runner."
+            exit 1
+          fi
+
+          if [ ! -d "$PODS_ROOT_VALUE" ]; then
+            echo ""
+            echo "ERROR: PODS_ROOT directory does not exist:"
+            echo "$PODS_ROOT_VALUE"
+            exit 1
+          fi
+
+          echo ""
+          echo "PODS_ROOT configuration is valid."
+
+      # ------------------------------------------------------------
+      # 11. Build macOS release
+      # ------------------------------------------------------------
       - name: Build macOS release
         run: flutter build macos --release
 
+      # ------------------------------------------------------------
+      # 12. Find and package generated .app
+      # ------------------------------------------------------------
       - name: Package macOS app
         shell: bash
         run: |
           set -e
 
           RELEASE_DIR="build/macos/Build/Products/Release"
+
+          echo "Searching for generated .app in:"
+          echo "$RELEASE_DIR"
 
           APP_PATH=$(find "$RELEASE_DIR" \
             -maxdepth 1 \
@@ -88,15 +191,27 @@ jobs:
             -quit)
 
           if [ -z "$APP_PATH" ]; then
+            echo ""
             echo "ERROR: No .app bundle found."
+
+            echo ""
             echo "Release directory contents:"
             ls -la "$RELEASE_DIR" || true
+
             exit 1
           fi
 
-          echo "Found app:"
+          APP_NAME=$(basename "$APP_PATH")
+
+          echo ""
+          echo "Found application:"
+          echo "$APP_NAME"
+
+          echo ""
+          echo "Full path:"
           echo "$APP_PATH"
 
+          # Preserve macOS bundle metadata correctly when creating the zip.
           ditto \
             -c \
             -k \
@@ -105,8 +220,13 @@ jobs:
             "$APP_PATH" \
             "breath-state-macos.zip"
 
-          ls -lh breath-state-macos.zip
+          echo ""
+          echo "Created package:"
+          ls -lh "breath-state-macos.zip"
 
+      # ------------------------------------------------------------
+      # 13. Upload ZIP as GitHub Actions artifact
+      # ------------------------------------------------------------
       - name: Upload macOS app
         uses: actions/upload-artifact@v4
         with:
