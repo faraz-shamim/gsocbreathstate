@@ -1,7 +1,13 @@
 
 # BreathState 2.0: GSoC 2026 Project Report
+**Faraz Shamim**  
+*Google Summer of Code 2026*
+### A cross-platform application for HRV biofeedback, resonance breathing, and multimodal physiological research.
 
-### A cross-platform application for HRV biofeedback, resonance breathing, and multimodal physiological research
+
+---
+
+## Table of Contents
 
 ## Contents
 
@@ -17,7 +23,7 @@
 - [Future work](#future-work)
 - [Acknowledgements](#acknowledgements)
 - [References and useful links](#references-and-useful-links)
-
+- [LICENSE](#license)
 ---
 
 ## Executive summary
@@ -240,5 +246,15 @@ I thank INCF and Google Summer of Code for the opportunity to contribute to open
 - Charlton, P. H. et al. (2016). [An assessment of algorithms to estimate respiratory rate from the electrocardiogram and photoplethysmogram](https://doi.org/10.1088/0967-3334/37/4/610).
 - [NeuroKit2](https://github.com/neuropsychology/NeuroKit)
 - [bleakheart](https://github.com/fsmeraldi/bleakheart)
+
+---
+
+## License
+
+BreathState 2.0 is licensed under the
+[PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/).
+
+Copyright © 2026 Faraz Shamim and m2b3 labs.
+See [LICENSE.md](LICENSE.md) for the complete license terms.
 
 ---
