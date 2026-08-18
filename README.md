@@ -235,8 +235,6 @@ I thank INCF and Google Summer of Code for the opportunity to contribute to open
 
 ## References and useful links
 
-- [Official GSoC 2026 project page](https://summerofcode.withgoogle.com/programs/2026/projects/axPxPpBS)
-- [INCF GSoC 2026 project showcase](https://www.incf.org/incf-gsoc-2026-projects)
 - [GSoC 2026 BreathState project discussion](https://neurostars.org/t/gsoc-2026-project-20-breathstate-contribution-a-phone-based-app-for-heart-rate-variability-biofeedback-and-resonance-breathing-protocols/35579)
 - [BreathState GSoC 2025 final report](https://gist.github.com/michaelLewis04/126e29b5450704977f8c45c1d443813b)
 - Fisher, L. R., & Lehrer, P. M. (2022). [A method for more accurate determination of resonance frequency of the cardiovascular system, and evaluation of a program to perform it](https://doi.org/10.1007/s10484-021-09524-0).
@@ -251,10 +249,19 @@ I thank INCF and Google Summer of Code for the opportunity to contribute to open
 
 ## License
 
-BreathState 2.0 is licensed under the
-[PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/).
+BreathState 2.0 is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+See the BreathState [LICENSE.md](https://github.com/Mr-Imperium/gsocbreathstate/blob/main/LICENSE.md) for the complete license terms.
 
 Copyright © 2026 Faraz Shamim and m2b3 labs.
-See [LICENSE.md](LICENSE.md) for the complete license terms.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
 ---
