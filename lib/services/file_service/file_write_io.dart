@@ -3,6 +3,8 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:developer' as developer;
 import 'package:share_plus/share_plus.dart';
 
+import 'export_result.dart';
+
 class FileWriterService {
   Future<void> writeStringToFile(String data, String fileName) async {
     try {
@@ -35,19 +37,31 @@ class FileWriterService {
     }
   }
 
-  Future<void> exportCsv(String csv, String displayName) async {
+  Future<CsvExportStatus> exportCsv(String csv, String displayName) async {
+    final directory = await getTemporaryDirectory();
+    final file = File(
+      '${directory.path}/${sanitizedExportName(displayName)}_export.csv',
+    );
     try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/${displayName}_export.csv');
-      await file.writeAsString(csv);
-      await SharePlus.instance.share(
+      await file.writeAsString(csv, flush: true);
+      final result = await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          text: 'BreathState data: $displayName',
+          text: 'BreathState data: ${sanitizedExportName(displayName)}',
         ),
       );
+      return switch (result.status) {
+        ShareResultStatus.success => CsvExportStatus.shared,
+        ShareResultStatus.dismissed => CsvExportStatus.dismissed,
+        ShareResultStatus.unavailable => CsvExportStatus.unavailable,
+      };
     } catch (e) {
       developer.log('Error exporting CSV: $e');
+      try {
+        if (await file.exists()) await file.delete();
+      } catch (_) {
+      }
+      rethrow;
     }
   }
 

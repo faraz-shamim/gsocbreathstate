@@ -50,6 +50,10 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen>
     with SingleTickerProviderStateMixin {
+  GoDirectProvider? _goDirectProvider;
+  PolarConnectProvider? _polarConnectProvider;
+  PatientProvider? _patientProvider;
+  AppDatabase? _database;
   SoundRecorder? _recorder;
   Stream<int>? _hrStream;
   StreamSubscription<List<UnifiedEcgSample>>? _ecgSub;
@@ -112,6 +116,15 @@ class _RecordScreenState extends State<RecordScreen>
     );
     _pulseController.repeat(reverse: true);
     WidgetsBinding.instance.addPostFrameCallback((_) => _refreshHistory());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _goDirectProvider = context.read<GoDirectProvider>();
+    _polarConnectProvider = context.read<PolarConnectProvider>();
+    _patientProvider = context.read<PatientProvider>();
+    _database = context.read<AppDatabase>();
   }
 
   Future<void> _refreshHistory() async {
@@ -292,9 +305,9 @@ class _RecordScreenState extends State<RecordScreen>
     _accSub?.cancel();
     _ecgSweepController.dispose();
     _recorder?.dispose();
-    _breathingAmplitudeSubscription?.cancel();
     _hrStorageSub?.cancel();
-    _stopHRRecording();
+    unawaited(_stopBelt());
+    unawaited(_stopHRRecording(showResults: false));
     unawaited(BackgroundSessionService.forceStop());
     _pulseController.dispose();
     if (_currentSessionId != null) {
@@ -304,8 +317,7 @@ class _RecordScreenState extends State<RecordScreen>
     super.dispose();
   }
 
-  int? get _activePatientId =>
-      context.read<PatientProvider>().activePatient?.id;
+  int? get _activePatientId => _patientProvider?.activePatient?.id;
 
   Future<void> _startRecording({
     required bool recordBR,
@@ -350,7 +362,10 @@ class _RecordScreenState extends State<RecordScreen>
         _breathRateConfidence = null;
       });
 
-      final gdProvider = context.read<GoDirectProvider>();
+      final gdProvider = _goDirectProvider;
+      if (gdProvider == null) {
+        throw StateError('Respiration belt provider is unavailable');
+      }
       if (gdProvider.isConnected) {
         try {
           await gdProvider.startMeasurements(sensorNumbers: [1], periodMs: 100);
@@ -371,6 +386,7 @@ class _RecordScreenState extends State<RecordScreen>
               });
         } catch (e) {
           developer.log('Belt start failed, falling back: $e');
+          await _stopBelt();
           _beltActiveForSession = false;
           if (recordHR && (!recordBR || _usesWebWindowsUi)) {
             _breathSource = 'Polar (HRV-derived)';
@@ -469,9 +485,6 @@ class _RecordScreenState extends State<RecordScreen>
           isRecordingBR = true;
         });
         _pulseController.repeat(reverse: true);
-        _beltBreathTimer = Timer(const Duration(seconds: 30), () {
-          unawaited(_finishBeltBreathRate(db: db, patientId: patientId));
-        });
       } else if (_polarOnlyBR) {
         await BackgroundSessionService.start(
           reason: 'Recording Polar HRV breathing data',
@@ -676,12 +689,12 @@ class _RecordScreenState extends State<RecordScreen>
   Future<void> _stopBelt() async {
     _beltBreathTimer?.cancel();
     _beltBreathTimer = null;
-    _beltSub?.cancel();
+    await _beltSub?.cancel();
     _beltSub = null;
-    _breathingAmplitudeSubscription?.cancel();
+    await _breathingAmplitudeSubscription?.cancel();
     _breathingAmplitudeSubscription = null;
-    final gdProvider = context.read<GoDirectProvider>();
-    if (gdProvider.isStreaming) {
+    final gdProvider = _goDirectProvider;
+    if (gdProvider != null && gdProvider.isStreaming) {
       await gdProvider.stopMeasurements();
     }
     _beltActiveForSession = false;
@@ -1181,11 +1194,15 @@ class _RecordScreenState extends State<RecordScreen>
   }
 
   Future<void> _stopHRRecording({bool showResults = true}) async {
-    _hrStorageSub?.cancel();
+    await _hrStorageSub?.cancel();
     _hrStorageSub = null;
 
-    final polarConnectProvider = context.read<PolarConnectProvider>();
+    final polarConnectProvider = _polarConnectProvider;
+    if (polarConnectProvider == null) return;
     final unified = polarConnectProvider.getPolarConnect();
+    final db = _database ?? AppDatabase();
+    final patientId = _activePatientId;
+
     if (unified != null) {
       try {
         final rrIntervals = List<double>.from(unified.bestSessionRrIntervals);
@@ -1207,15 +1224,14 @@ class _RecordScreenState extends State<RecordScreen>
             debugPrint('ECG-derived HRV skipped: $e');
           }
         }
-        setState(() {
-          _hrStream = null;
-          isRecordingHR = false;
-        });
+        if (mounted) {
+          setState(() {
+            _hrStream = null;
+            isRecordingHR = false;
+          });
+        }
         developer.log("HR recording stopped");
-        _checkStopEffect();
-
-        final db = context.read<AppDatabase>();
-        final patientId = _activePatientId;
+        if (mounted) _checkStopEffect();
 
         if (hrvResult != null && mounted) {
           if (_currentSessionId != null && patientId != null) {
@@ -1318,11 +1334,50 @@ class _RecordScreenState extends State<RecordScreen>
         developer.log("Error stopping HR recording: $e");
         _polarOnlyBR = false;
       }
+    } else if (_beltActiveForSession || isRecordingBR) {
+      try {
+        _liveBreathRateTimer?.cancel();
+        _liveBreathRateTimer = null;
+        _breathRateTracker?.dispose();
+        _breathRateTracker = null;
+        _lastRrFedIndex = 0;
+        _lastLiveRrSource = null;
+
+        await _finalizeBreathRateForSession(
+          db: db,
+          patientId: patientId,
+          rrIntervals: const [],
+        );
+
+        final nowIso = DateTime.now().toIso8601String();
+        if (_currentSessionId != null) {
+          await db.endSession(_currentSessionId!);
+        }
+
+        if (patientId != null && _currentSessionStartedAt != null) {
+          await _saveSessionSummary(
+            patientId: patientId,
+            startedAt: _currentSessionStartedAt!,
+            endedAt: nowIso,
+            breathRateVal: breathingRate > 0 ? breathingRate : null,
+            breathSourceVal: _breathSource,
+          );
+        }
+        _currentSessionId = null;
+        _currentSessionStartedAt = null;
+        _refreshHistory();
+        _polarOnlyBR = false;
+      } catch (e) {
+        developer.log("Error stopping belt recording: $e");
+      }
     }
-    setState(() {
-      isRecordingHR = false;
-    });
-    _checkStopEffect();
+    if (mounted) {
+      setState(() {
+        isRecordingHR = false;
+        isRecordingBR = false;
+      });
+      _checkStopEffect();
+    }
   }
 
   void _openResonanceTrainer(PolarConnectProvider provider) {
@@ -1848,7 +1903,7 @@ class _RecordScreenState extends State<RecordScreen>
         statusText: _ecgStatus,
         lastRrMs: _ecgDerivedLastRrMs,
         rPeakCount: _ecgRPeakCount,
-        onStop: isRecordingHR ? _stopHRRecording : null,
+        onStop: (isRecordingHR || isRecordingBR) ? _stopHRRecording : null,
       );
     }
 

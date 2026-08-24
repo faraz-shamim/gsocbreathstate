@@ -58,6 +58,16 @@ class MainActivity : FlutterActivity() {
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
+            "breath_state/platform",
+        ).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "androidSdkInt" -> result.success(Build.VERSION.SDK_INT)
+                else -> result.notImplemented()
+            }
+        }
+
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
             "breath_state/webxr",
         ).setMethodCallHandler { call, result ->
             when (call.method) {

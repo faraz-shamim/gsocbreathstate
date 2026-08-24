@@ -1,7 +1,3 @@
-                                                                 
-   
-                               
-                                                              
 library;
 
 import 'dart:convert';
@@ -14,10 +10,6 @@ import 'package:breath_state/services/ecg_respiration/ecg_rpeak_detector.dart';
 import 'package:breath_state/services/hrv_analysis/hrv_time_domain.dart';
 
 part 'database.g.dart';
-
-                                                                      
-                     
-                                                                      
 
 class Patients extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -132,7 +124,6 @@ class PsychometricEntries extends Table {
   TextColumn get notes => text().nullable()();
 }
 
-                                                               
 @DataClassName('SessionSummary')
 class SessionSummaries extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -143,28 +134,23 @@ class SessionSummaries extends Table {
   TextColumn get startedAt => text()();
   TextColumn get endedAt => text().nullable()();
   IntColumn get durationSeconds => integer().withDefault(const Constant(0))();
-                
+
   IntColumn get breathRate => integer().nullable()();
   TextColumn get breathSource => text().nullable()();
-               
+
   RealColumn get avgHeartRate => real().nullable()();
   IntColumn get minHeartRate => integer().nullable()();
   IntColumn get maxHeartRate => integer().nullable()();
-                    
+
   RealColumn get rmssd => real().nullable()();
   RealColumn get sdnn => real().nullable()();
   RealColumn get meanNn => real().nullable()();
   RealColumn get pnn50 => real().nullable()();
-                                       
+
   TextColumn get hrReadingsJson => text().nullable()();
   TextColumn get extendedMetricsJson => text().nullable()();
 }
 
-                                                                             
-   
-                                                                            
-                                                                               
-                                           
 @DataClassName('RfAssessmentRecord')
 class RfAssessmentRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -203,10 +189,6 @@ class RfAssessmentRecords extends Table {
   TextColumn get respirationSamplesJson => text().nullable()();
   TextColumn get createdAt => text()();
 }
-
-                                                                      
-            
-                                                                      
 
 @DriftDatabase(
   tables: [
@@ -283,10 +265,6 @@ class AppDatabase extends _$AppDatabase {
     },
   );
 
-                                                                
-                  
-                                                                
-
   Future<List<Patient>> getAllPatients() => select(patients).get();
   Stream<List<Patient>> watchAllPatients() => select(patients).watch();
 
@@ -350,10 +328,6 @@ class AppDatabase extends _$AppDatabase {
     await (delete(patients)..where((p) => p.id.equals(id))).go();
   }
 
-                                                                
-              
-                                                                
-
   Future<int> createSession({
     required int patientId,
     required String sessionType,
@@ -380,11 +354,6 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
-                                                                
-                                                              
-                                                                
-
-                                                   
   Future<int> insertSessionSummary({
     required int patientId,
     String sessionType = 'recording',
@@ -506,7 +475,6 @@ class AppDatabase extends _$AppDatabase {
         .watch();
   }
 
-                                                              
   Future<List<SessionSummary>> getSessionSummaries(int patientId) {
     return (select(sessionSummaries)
           ..where((s) => s.patientId.equals(patientId))
@@ -521,14 +489,9 @@ class AppDatabase extends _$AppDatabase {
         .watch();
   }
 
-                                     
   Future<void> deleteSessionSummary(int id) async {
     await (delete(sessionSummaries)..where((s) => s.id.equals(id))).go();
   }
-
-                                                                
-                 
-                                                                
 
   Future<void> insertBreathRate({
     required int sessionId,
@@ -562,10 +525,6 @@ class AppDatabase extends _$AppDatabase {
         .watch();
   }
 
-                                                                
-                
-                                                                
-
   Future<void> insertHeartRate({
     required int sessionId,
     required int patientId,
@@ -595,10 +554,6 @@ class AppDatabase extends _$AppDatabase {
           ..orderBy([(e) => OrderingTerm.asc(e.timestamp)]))
         .watch();
   }
-
-                                                                
-                 
-                                                                
 
   Future<void> insertEcgSamples({
     required int sessionId,
@@ -630,10 +585,6 @@ class AppDatabase extends _$AppDatabase {
           ..orderBy([(e) => OrderingTerm.asc(e.timestampMs)]))
         .get();
   }
-
-                                                                
-         
-                                                                
 
   Future<void> insertHrvResult({
     required int sessionId,
@@ -681,10 +632,6 @@ class AppDatabase extends _$AppDatabase {
           ..orderBy([(e) => OrderingTerm.desc(e.timestamp)]))
         .get();
   }
-
-                                                                
-                
-                                                                
 
   Future<int> insertPsychometricEntry({
     required int patientId,
@@ -736,8 +683,121 @@ class AppDatabase extends _$AppDatabase {
     await (delete(psychometricEntries)..where((e) => e.id.equals(id))).go();
   }
 
+  static const List<String> _patientExportColumns = [
+    'patient_id',
+    'patient_name',
+    'patient_age',
+    'patient_sex',
+    'patient_height_cm',
+    'timestamp_us',
+    'timestamp_ms',
+    'elapsed_us',
+    'elapsed_ms',
+    'sample_index',
+    'signal_quality',
+    'ecg_rr_ms',
+    'hr_bpm',
+    'rr_bpm',
+    'rmssd',
+    'sdnn',
+    'stress_index',
+    'psychometric_scale',
+    'psychometric_score',
+    'psychometric_severity',
+    'row_type',
+    'session_id',
+    'source',
+    'rf_bpm',
+    'rf_mode',
+    'rf_protocol_version',
+    'rf_quality_passed',
+    'rf_quality_flags',
+    'rf_applied_to_patient',
+    'rf_estimate_confirmed',
+    'rf_peak_to_trough_ms',
+    'rf_scheduled_bpm',
+    'rf_measured_respiration_bpm',
+    'rf_ectopic_corrections',
+    'rf_rollout_stage',
+    'rf_protocol_conformance_passed',
+    'rf_protocol_fingerprint',
+    'patient_date_of_birth',
+    'patient_notes',
+    'patient_resonance_frequency_bpm',
+    'patient_created_at',
+    'patient_updated_at',
+    'record_id',
+    'summary_id',
+    'session_summary_id',
+    'session_type',
+    'session_started_at',
+    'session_ended_at',
+    'session_notes',
+    'session_duration_seconds',
+    'source_timestamp',
+    'measurement_rate_bpm',
+    'ecg_uv',
+    'ecg_source',
+    'hrv_mean_nn',
+    'hrv_sdnn',
+    'hrv_rmssd',
+    'hrv_sdsd',
+    'hrv_cvnn',
+    'hrv_cvsd',
+    'hrv_median_nn',
+    'hrv_mad_nn',
+    'hrv_mcvnn',
+    'hrv_iqrnn',
+    'hrv_sdrmssd',
+    'hrv_prc20nn',
+    'hrv_prc80nn',
+    'hrv_pnn50',
+    'hrv_pnn20',
+    'hrv_min_nn',
+    'hrv_max_nn',
+    'hrv_hti',
+    'hrv_tinn',
+    'hrv_sdann1',
+    'hrv_sdann2',
+    'hrv_sdann5',
+    'hrv_sdnni1',
+    'hrv_sdnni2',
+    'hrv_sdnni5',
+    'psychometric_responses_json',
+    'psychometric_administered_at',
+    'psychometric_administered_by',
+    'psychometric_requires_review',
+    'psychometric_notes',
+    'summary_breath_rate',
+    'summary_breath_source',
+    'summary_avg_heart_rate',
+    'summary_min_heart_rate',
+    'summary_max_heart_rate',
+    'summary_mean_nn',
+    'summary_pnn50',
+    'summary_hr_readings_json',
+    'summary_extended_metrics_json',
+    'rf_assessment_id',
+    'rf_status',
+    'rf_duration_ms',
+    'rf_completed_cycles',
+    'rf_center_elapsed_ms',
+    'rf_adherence_delta_bpm',
+    'rf_respiration_fit_error',
+    'rf_quality_flags_json',
+    'rf_protocol_json',
+    'rf_result_json',
+    'rf_rr_samples_json',
+    'rf_respiration_samples_json',
+    'rf_created_at',
+  ];
+
   Future<String> generatePatientCsv(int patientId) async {
     final patient = await getPatientById(patientId);
+    if (patient == null) {
+      throw StateError('Cannot export an unknown patient (id $patientId).');
+    }
+
     final breathList = await getBreathRatesForPatient(patientId);
     final heartList = await getHeartRatesForPatient(patientId);
     final ecgList = await getEcgSamplesForPatient(patientId);
@@ -755,21 +815,38 @@ class AppDatabase extends _$AppDatabase {
 
     final buf = StringBuffer();
     buf.writeln(_patientMetadataLine(patient));
-    buf.writeln(
-      'patient_id,patient_name,patient_age,patient_sex,patient_height_cm,'
-      'timestamp_us,timestamp_ms,elapsed_us,elapsed_ms,'
-      'sample_index,signal_quality,ecg_rr_ms,'
-      'hr_bpm,rr_bpm,rmssd,sdnn,stress_index,'
-      'psychometric_scale,psychometric_score,psychometric_severity,'
-      'row_type,session_id,source,'
-      'rf_bpm,rf_mode,rf_protocol_version,rf_quality_passed,'
-      'rf_quality_flags,rf_applied_to_patient,rf_estimate_confirmed,'
-      'rf_peak_to_trough_ms,rf_scheduled_bpm,rf_measured_respiration_bpm,'
-      'rf_ectopic_corrections,rf_rollout_stage,'
-      'rf_protocol_conformance_passed,rf_protocol_fingerprint',
-    );
+    buf.writeln(_patientExportColumns.join(','));
 
     final rows = <_ExportRow>[];
+
+    rows.add(
+      _ExportRow(
+        rowType: 'patient',
+        fields: {'record_id': patient.id, 'source': 'database'},
+      ),
+    );
+
+    for (final session in sessionsList) {
+      final startedMs = _parseTimestampMs(session.startedAt);
+      rows.add(
+        _ExportRow(
+          timestampUs: startedMs == null ? null : startedMs * 1000,
+          timestampMs: startedMs,
+          elapsedUs: 0,
+          elapsedMs: 0,
+          rowType: 'session',
+          fields: {
+            'record_id': session.id,
+            'session_id': session.id,
+            'source': 'database',
+            'session_type': session.sessionType,
+            'session_started_at': session.startedAt,
+            'session_ended_at': session.endedAt,
+            'session_notes': session.notes,
+          },
+        ),
+      );
+    }
 
     for (final e in ecgList) {
       final ecgRr = ecgRrByEntryId[e.id];
@@ -783,8 +860,13 @@ class AppDatabase extends _$AppDatabase {
           signalQuality: ecgRr?.signalQuality,
           ecgRrMs: ecgRr?.rrMs,
           rowType: 'ecg',
-          sessionId: e.sessionId,
-          source: 'polar',
+          fields: {
+            'record_id': e.id,
+            'session_id': e.sessionId,
+            'source': 'polar',
+            'ecg_uv': e.ecgUv,
+            'ecg_source': 'polar',
+          },
         ),
       );
     }
@@ -809,8 +891,13 @@ class AppDatabase extends _$AppDatabase {
           signalQuality: sqi == null ? null : _sqiLabel(sqi.level),
           hrBpm: e.rate,
           rowType: 'heart_rate',
-          sessionId: e.sessionId,
-          source: 'polar',
+          fields: {
+            'record_id': e.id,
+            'session_id': e.sessionId,
+            'source': 'polar',
+            'source_timestamp': e.timestamp,
+            'measurement_rate_bpm': e.rate,
+          },
         ),
       );
     }
@@ -828,8 +915,13 @@ class AppDatabase extends _$AppDatabase {
           elapsedMs: _elapsedMs(timestampMs, sessionStarts[e.sessionId]),
           rrBpm: e.rate,
           rowType: 'breath_rate',
-          sessionId: e.sessionId,
-          source: e.source,
+          fields: {
+            'record_id': e.id,
+            'session_id': e.sessionId,
+            'source': e.source,
+            'source_timestamp': e.timestamp,
+            'measurement_rate_bpm': e.rate,
+          },
         ),
       );
     }
@@ -848,8 +940,37 @@ class AppDatabase extends _$AppDatabase {
           rmssd: e.rmssd,
           sdnn: e.sdnn,
           rowType: 'hrv',
-          sessionId: e.sessionId,
-          source: 'polar',
+          fields: {
+            'record_id': e.id,
+            'session_id': e.sessionId,
+            'source': 'polar',
+            'source_timestamp': e.timestamp,
+            'hrv_mean_nn': e.meanNn,
+            'hrv_sdnn': e.sdnn,
+            'hrv_rmssd': e.rmssd,
+            'hrv_sdsd': e.sdsd,
+            'hrv_cvnn': e.cvnn,
+            'hrv_cvsd': e.cvsd,
+            'hrv_median_nn': e.medianNn,
+            'hrv_mad_nn': e.madNn,
+            'hrv_mcvnn': e.mcvnn,
+            'hrv_iqrnn': e.iqrnn,
+            'hrv_sdrmssd': e.sdrmssd,
+            'hrv_prc20nn': e.prc20nn,
+            'hrv_prc80nn': e.prc80nn,
+            'hrv_pnn50': e.pnn50,
+            'hrv_pnn20': e.pnn20,
+            'hrv_min_nn': e.minNn,
+            'hrv_max_nn': e.maxNn,
+            'hrv_hti': e.hti,
+            'hrv_tinn': e.tinn,
+            'hrv_sdann1': e.sdann1,
+            'hrv_sdann2': e.sdann2,
+            'hrv_sdann5': e.sdann5,
+            'hrv_sdnni1': e.sdnni1,
+            'hrv_sdnni2': e.sdnni2,
+            'hrv_sdnni5': e.sdnni5,
+          },
         ),
       );
     }
@@ -866,33 +987,56 @@ class AppDatabase extends _$AppDatabase {
           psychometricScore: e.totalScore,
           psychometricSeverity: e.severityLevel,
           rowType: 'psychometric',
-          sessionId: null,
-          source: e.administeredBy,
+          fields: {
+            'record_id': e.id,
+            'source': e.administeredBy,
+            'source_timestamp': e.administeredAt,
+            'psychometric_responses_json': e.responsesJson,
+            'psychometric_administered_at': e.administeredAt,
+            'psychometric_administered_by': e.administeredBy,
+            'psychometric_requires_review': e.requiresReview,
+            'psychometric_notes': e.notes,
+          },
         ),
       );
     }
 
     for (final s in summaryList) {
-      final timestampMs =
-          _parseTimestampMs(s.endedAt ?? s.startedAt) ?? sessionStarts[s.id];
+      final startedMs = _parseTimestampMs(s.startedAt);
+      final timestampMs = _parseTimestampMs(s.endedAt ?? s.startedAt);
       rows.add(
         _ExportRow(
           timestampUs: timestampMs == null ? null : timestampMs * 1000,
           timestampMs: timestampMs,
           elapsedUs:
-              _elapsedMs(timestampMs, _parseTimestampMs(s.startedAt)) == null
+              _elapsedMs(timestampMs, startedMs) == null
                   ? null
-                  : _elapsedMs(timestampMs, _parseTimestampMs(s.startedAt))! *
-                      1000,
-          elapsedMs: _elapsedMs(timestampMs, _parseTimestampMs(s.startedAt)),
+                  : _elapsedMs(timestampMs, startedMs)! * 1000,
+          elapsedMs: _elapsedMs(timestampMs, startedMs),
           hrBpm: s.avgHeartRate,
           rrBpm: s.breathRate,
           rmssd: s.rmssd,
           sdnn: s.sdnn,
           stressIndex: _stressIndexFromSummary(s),
           rowType: 'session_summary',
-          sessionId: null,
-          source: s.breathSource,
+          fields: {
+            'record_id': s.id,
+            'summary_id': s.id,
+            'source': s.breathSource,
+            'session_type': s.sessionType,
+            'session_started_at': s.startedAt,
+            'session_ended_at': s.endedAt,
+            'session_duration_seconds': s.durationSeconds,
+            'summary_breath_rate': s.breathRate,
+            'summary_breath_source': s.breathSource,
+            'summary_avg_heart_rate': s.avgHeartRate,
+            'summary_min_heart_rate': s.minHeartRate,
+            'summary_max_heart_rate': s.maxHeartRate,
+            'summary_mean_nn': s.meanNn,
+            'summary_pnn50': s.pnn50,
+            'summary_hr_readings_json': s.hrReadingsJson,
+            'summary_extended_metrics_json': s.extendedMetricsJson,
+          },
         ),
       );
     }
@@ -908,8 +1052,24 @@ class AppDatabase extends _$AppDatabase {
           elapsedMs: record.durationMs.round(),
           rrBpm: record.fittedRespirationBpm,
           rowType: 'rf_assessment',
-          sessionId: record.sessionSummaryId,
-          source: record.surface,
+          fields: {
+            'record_id': record.id,
+            'source': record.surface,
+            'session_summary_id': record.sessionSummaryId,
+            'rf_assessment_id': record.id,
+            'rf_status': record.status,
+            'rf_duration_ms': record.durationMs,
+            'rf_completed_cycles': record.completedCycles,
+            'rf_center_elapsed_ms': record.rfCenterElapsedMs,
+            'rf_adherence_delta_bpm': record.adherenceDeltaBpm,
+            'rf_respiration_fit_error': record.respirationFitError,
+            'rf_quality_flags_json': record.qualityFlagsJson,
+            'rf_protocol_json': record.protocolJson,
+            'rf_result_json': record.resultJson,
+            'rf_rr_samples_json': record.rrSamplesJson,
+            'rf_respiration_samples_json': record.respirationSamplesJson,
+            'rf_created_at': record.createdAt,
+          },
           rfBpm: record.rfBpm,
           rfMode: record.mode,
           rfProtocolVersion: record.protocolVersion,
@@ -940,7 +1100,13 @@ class AppDatabase extends _$AppDatabase {
       if (bTime == null) return -1;
       final byTime = aTime.compareTo(bTime);
       if (byTime != 0) return byTime;
-      return (a.sampleIndex ?? -1).compareTo(b.sampleIndex ?? -1);
+      final bySample = (a.sampleIndex ?? -1).compareTo(b.sampleIndex ?? -1);
+      if (bySample != 0) return bySample;
+      final byType = a.rowType.compareTo(b.rowType);
+      if (byType != 0) return byType;
+      return (a.fields['record_id'] as int? ?? -1).compareTo(
+        b.fields['record_id'] as int? ?? -1,
+      );
     });
 
     for (final row in rows) {
@@ -963,11 +1129,13 @@ class AppDatabase extends _$AppDatabase {
   static String _patientMetadataLine(Patient? patient) {
     if (patient == null) return 'patient_id=';
     final values = [
+      'export_schema_version=2',
       'patient_id=${patient.id}',
       'patient_name=${patient.name}',
       'patient_age=${patient.age ?? ''}',
       'patient_sex=${patient.sex ?? ''}',
       'patient_height_cm=${patient.heightCm ?? ''}',
+      'patient_date_of_birth=${patient.dateOfBirth ?? ''}',
       'notes=${patient.notes ?? ''}',
       'resonance_frequency_bpm=${patient.resonanceFrequency ?? ''}',
       'created_at=${patient.createdAt}',
@@ -1079,7 +1247,10 @@ class AppDatabase extends _$AppDatabase {
 
   static String _csvCell(Object? value) {
     if (value == null) return '';
-    final text = value.toString().replaceAll(RegExp(r'[\r\n]+'), ' ');
+    var text = value.toString();
+    if (text.isNotEmpty && RegExp(r'^[=+\-@\t]').hasMatch(text)) {
+      text = "'$text";
+    }
     if (!text.contains(',') &&
         !text.contains('"') &&
         !text.contains('\n') &&
@@ -1088,10 +1259,6 @@ class AppDatabase extends _$AppDatabase {
     }
     return '"${text.replaceAll('"', '""')}"';
   }
-
-                                                                
-                        
-                                                                
 
   static HrvTimeDomainResult hrvEntryToResult(HrvEntry e) {
     return HrvTimeDomainResult(
@@ -1130,6 +1297,11 @@ class _PatientExportFields {
   final int? age;
   final String? sex;
   final double? heightCm;
+  final String? dateOfBirth;
+  final String? notes;
+  final double? resonanceFrequency;
+  final String? createdAt;
+  final String? updatedAt;
 
   const _PatientExportFields({
     required this.id,
@@ -1137,6 +1309,11 @@ class _PatientExportFields {
     required this.age,
     required this.sex,
     required this.heightCm,
+    required this.dateOfBirth,
+    required this.notes,
+    required this.resonanceFrequency,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory _PatientExportFields.from(Patient? patient) {
@@ -1146,6 +1323,11 @@ class _PatientExportFields {
       age: patient?.age,
       sex: patient?.sex,
       heightCm: patient?.heightCm,
+      dateOfBirth: patient?.dateOfBirth,
+      notes: patient?.notes,
+      resonanceFrequency: patient?.resonanceFrequency,
+      createdAt: patient?.createdAt,
+      updatedAt: patient?.updatedAt,
     );
   }
 }
@@ -1192,8 +1374,7 @@ class _ExportRow {
   final int? psychometricScore;
   final String? psychometricSeverity;
   final String rowType;
-  final int? sessionId;
-  final String? source;
+  final Map<String, Object?> fields;
   final double? rfBpm;
   final String? rfMode;
   final String? rfProtocolVersion;
@@ -1210,10 +1391,10 @@ class _ExportRow {
   final String? rfProtocolFingerprint;
 
   const _ExportRow({
-    required this.timestampUs,
-    required this.timestampMs,
-    required this.elapsedUs,
-    required this.elapsedMs,
+    this.timestampUs,
+    this.timestampMs,
+    this.elapsedUs,
+    this.elapsedMs,
     this.sampleIndex,
     this.signalQuality,
     this.ecgRrMs,
@@ -1226,8 +1407,7 @@ class _ExportRow {
     this.psychometricScore,
     this.psychometricSeverity,
     required this.rowType,
-    required this.sessionId,
-    this.source,
+    this.fields = const {},
     this.rfBpm,
     this.rfMode,
     this.rfProtocolVersion,
@@ -1245,44 +1425,52 @@ class _ExportRow {
   });
 
   String toCsvLine(_PatientExportFields patient) {
-    return [
-      patient.id,
-      patient.name,
-      patient.age,
-      patient.sex,
-      patient.heightCm,
-      timestampUs,
-      timestampMs,
-      elapsedUs,
-      elapsedMs,
-      sampleIndex,
-      signalQuality,
-      ecgRrMs,
-      hrBpm,
-      rrBpm,
-      rmssd,
-      sdnn,
-      stressIndex,
-      psychometricScale,
-      psychometricScore,
-      psychometricSeverity,
-      rowType,
-      sessionId,
-      source,
-      rfBpm,
-      rfMode,
-      rfProtocolVersion,
-      rfQualityPassed,
-      rfQualityFlags,
-      rfAppliedToPatient,
-      rfEstimateConfirmed,
-      rfPeakToTroughMs,
-      rfScheduledBpm,
-      rfMeasuredRespirationBpm,
-      rfEctopicCorrections,
-      rfRolloutStage,
-      rfProtocolConformancePassed,
-      rfProtocolFingerprint,
-    ].map(AppDatabase._csvCell).join(',');
+    final values = <String, Object?>{
+      'patient_id': patient.id,
+      'patient_name': patient.name,
+      'patient_age': patient.age,
+      'patient_sex': patient.sex,
+      'patient_height_cm': patient.heightCm,
+      'timestamp_us': timestampUs,
+      'timestamp_ms': timestampMs,
+      'elapsed_us': elapsedUs,
+      'elapsed_ms': elapsedMs,
+      'sample_index': sampleIndex,
+      'signal_quality': signalQuality,
+      'ecg_rr_ms': ecgRrMs,
+      'hr_bpm': hrBpm,
+      'rr_bpm': rrBpm,
+      'rmssd': rmssd,
+      'sdnn': sdnn,
+      'stress_index': stressIndex,
+      'psychometric_scale': psychometricScale,
+      'psychometric_score': psychometricScore,
+      'psychometric_severity': psychometricSeverity,
+      'row_type': rowType,
+      'rf_bpm': rfBpm,
+      'rf_mode': rfMode,
+      'rf_protocol_version': rfProtocolVersion,
+      'rf_quality_passed': rfQualityPassed,
+      'rf_quality_flags': rfQualityFlags,
+      'rf_applied_to_patient': rfAppliedToPatient,
+      'rf_estimate_confirmed': rfEstimateConfirmed,
+      'rf_peak_to_trough_ms': rfPeakToTroughMs,
+      'rf_scheduled_bpm': rfScheduledBpm,
+      'rf_measured_respiration_bpm': rfMeasuredRespirationBpm,
+      'rf_ectopic_corrections': rfEctopicCorrections,
+      'rf_rollout_stage': rfRolloutStage,
+      'rf_protocol_conformance_passed': rfProtocolConformancePassed,
+      'rf_protocol_fingerprint': rfProtocolFingerprint,
+      'patient_date_of_birth': patient.dateOfBirth,
+      'patient_notes': patient.notes,
+      'patient_resonance_frequency_bpm': patient.resonanceFrequency,
+      'patient_created_at': patient.createdAt,
+      'patient_updated_at': patient.updatedAt,
+      ...fields,
+    };
+
+    return AppDatabase._patientExportColumns
+        .map((column) => AppDatabase._csvCell(values[column]))
+        .join(',');
   }
 }

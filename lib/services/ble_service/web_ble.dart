@@ -1,11 +1,7 @@
-                                        
-
 import 'dart:async';
 import 'dart:js_interop';
 import 'package:flutter/foundation.dart';
 import 'package:web/web.dart' as web;
-
-                                                                     
 
 @JS('navigator.bluetooth.requestDevice')
 external JSPromise<JSObject> _requestDevice(JSObject options);
@@ -15,7 +11,7 @@ external JSObject? get _bluetooth;
 
 extension type BluetoothDevice._(JSObject _) implements JSObject {
   external String get id;
-  external String get name;
+  external String? get name;
   external BluetoothRemoteGATTServer get gatt;
   external void addEventListener(String type, JSFunction listener);
   external void removeEventListener(String type, JSFunction listener);
@@ -47,8 +43,6 @@ extension type BluetoothRemoteGATTCharacteristic._(JSObject _)
   external JSDataView? get value;
 }
 
-                                                                     
-
 bool get isWebBluetoothSupported {
   if (!kIsWeb) return false;
   return _bluetooth != null;
@@ -59,7 +53,9 @@ class WebBleDevice {
   final String name;
   final BluetoothDevice _jsDevice;
 
-  WebBleDevice._(this._jsDevice) : id = _jsDevice.id, name = _jsDevice.name;
+  WebBleDevice._(this._jsDevice)
+    : id = _jsDevice.id,
+      name = _jsDevice.name ?? 'Go Direct device';
 
   BluetoothRemoteGATTServer get gatt => _jsDevice.gatt;
 }
@@ -75,15 +71,15 @@ Future<WebBleDevice?> requestWebBleDevice({
       final filter =
           <String, dynamic>{'namePrefix': namePrefix}.jsify() as JSObject;
       filters.add(filter);
-    }
-
-    for (final uuid in serviceUuids) {
-      final filter =
-          <String, dynamic>{
-                'services': [uuid].jsify(),
-              }.jsify()
-              as JSObject;
-      filters.add(filter);
+    } else {
+      for (final uuid in serviceUuids) {
+        final filter =
+            <String, dynamic>{
+                  'services': [uuid].jsify(),
+                }.jsify()
+                as JSObject;
+        filters.add(filter);
+      }
     }
 
     final JSObject options;
@@ -175,7 +171,7 @@ Future<void> writeCharacteristic(
   BluetoothRemoteGATTCharacteristic char,
   Uint8List data,
 ) async {
-  await char.writeValueWithResponse(data.buffer.toJS).toDart;
+  await char.writeValue(data.buffer.toJS).toDart;
 }
 
 StreamController<List<int>> _notificationController(
@@ -183,8 +179,6 @@ StreamController<List<int>> _notificationController(
 ) {
   final controller = StreamController<List<int>>.broadcast();
 
-                                                                      
-                                                   
   char.oncharacteristicvaluechanged =
       ((web.Event _) {
         try {
@@ -243,8 +237,11 @@ Future<Stream<List<int>>> startNotificationsReady(
     return controller.stream;
   } catch (e) {
     debugPrint('Web BLE startNotifications failed: $e');
+    char.oncharacteristicvaluechanged = null;
+    try {
+      await char.stopNotifications().toDart;
+    } catch (_) {}
     if (!controller.isClosed) {
-      controller.addError(e);
       await controller.close();
     }
     rethrow;

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:breath_state/providers/go_direct_provider.dart';
+import 'package:breath_state/services/ble_service/ble_scanning.dart';
 import 'package:breath_state/services/go_direct/go_direct_constants.dart';
 import 'package:breath_state/theme/app_theme.dart';
 import 'package:breath_state/widgets/glass_card.dart';
@@ -15,20 +18,34 @@ class GoDirectScanScreen extends StatefulWidget {
 }
 
 class _GoDirectScanScreenState extends State<GoDirectScanScreen> {
+  GoDirectProvider? _provider;
   bool _isConnecting = false;
+  bool _isPreparingScan = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _provider = context.read<GoDirectProvider>();
+  }
 
   @override
   void dispose() {
-    final provider = context.read<GoDirectProvider>();
-    if (provider.connectionState == GoDirectConnectionState.scanning) {
-      provider.stopScan();
+    final provider = _provider;
+    if (provider?.connectionState == GoDirectConnectionState.scanning) {
+      unawaited(provider!.stopScan());
     }
     super.dispose();
   }
 
   Future<void> _onDeviceTap(String deviceId) async {
-    setState(() => _isConnecting = true);
-    final provider = context.read<GoDirectProvider>();
+    if (_isConnecting) return;
+    _isConnecting = true;
+    setState(() {});
+    final provider = _provider;
+    if (provider == null) {
+      if (mounted) setState(() => _isConnecting = false);
+      return;
+    }
     final success = await provider.connect(deviceId);
     if (!mounted) return;
     setState(() => _isConnecting = false);
@@ -44,11 +61,89 @@ class _GoDirectScanScreenState extends State<GoDirectScanScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Connection failed. Please try again.'),
+        SnackBar(
+          content: Text(
+            provider.lastError ?? 'Connection failed. Please try again.',
+          ),
           backgroundColor: AppTheme.dustyRose,
         ),
       );
+    }
+  }
+
+  Future<void> _onReconnect() async {
+    if (_isConnecting) return;
+    _isConnecting = true;
+    setState(() {});
+    final provider = _provider;
+    if (provider == null) {
+      if (mounted) setState(() => _isConnecting = false);
+      return;
+    }
+    final success = await provider.reconnect();
+    if (!mounted) return;
+    setState(() => _isConnecting = false);
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Reconnected to ${provider.connectedDeviceName ?? "device"}',
+          ),
+          backgroundColor: AppTheme.emerald,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            provider.lastError ?? 'Reconnection failed. Please scan again.',
+          ),
+          backgroundColor: AppTheme.dustyRose,
+        ),
+      );
+    }
+  }
+
+  Future<void> _startScan() async {
+    if (_isPreparingScan || _isConnecting) return;
+    setState(() => _isPreparingScan = true);
+    try {
+      final preparationError = await BleScanning.prepareForScan();
+      if (!mounted) return;
+      if (preparationError != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(preparationError),
+            backgroundColor: AppTheme.dustyRose,
+          ),
+        );
+        return;
+      }
+
+      final provider = _provider;
+      if (provider == null) return;
+      await provider.startScan();
+      if (!mounted) return;
+      if (provider.connectionState == GoDirectConnectionState.error &&
+          provider.lastError != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(provider.lastError!),
+            backgroundColor: AppTheme.dustyRose,
+          ),
+        );
+      }
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Unable to scan for the respiration belt: $error'),
+          backgroundColor: AppTheme.dustyRose,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isPreparingScan = false);
     }
   }
 
@@ -298,20 +393,74 @@ class _GoDirectScanScreenState extends State<GoDirectScanScreen> {
   ) {
     final devices = provider.lastScanResults;
     final isScanning = state == GoDirectConnectionState.scanning;
+    final isScanBusy = isScanning || _isPreparingScan;
 
     return Column(
       children: [
+        if (provider.canReconnect) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+            child: GlassCard(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppTheme.signalWarn.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.refresh_rounded,
+                      color: AppTheme.signalWarn,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Quick Reconnect',
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        Text(
+                          provider.lastConnectedDeviceName ?? 'Previous belt',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontSize: 11,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: isScanBusy || _isConnecting ? null : _onReconnect,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      minimumSize: const Size(0, 36),
+                    ),
+                    child: const Text('Reconnect'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed:
-                  isScanning || _isConnecting
-                      ? null
-                      : () => provider.startScan(),
+              onPressed: isScanBusy || _isConnecting ? null : _startScan,
               icon:
-                  isScanning
+                  isScanBusy
                       ? const SizedBox(
                         width: 18,
                         height: 18,
@@ -321,7 +470,13 @@ class _GoDirectScanScreenState extends State<GoDirectScanScreen> {
                         ),
                       )
                       : const Icon(Icons.search_rounded),
-              label: Text(isScanning ? 'Scanning...' : 'Scan for Devices'),
+              label: Text(
+                isScanning
+                    ? 'Scanning...'
+                    : _isPreparingScan
+                    ? 'Preparing Bluetooth...'
+                    : 'Scan for Devices',
+              ),
             ),
           ),
         ),
@@ -340,16 +495,32 @@ class _GoDirectScanScreenState extends State<GoDirectScanScreen> {
                   : devices.isEmpty
                   ? PremiumEmptyState(
                     icon:
-                        isScanning
+                        isScanBusy
                             ? Icons.radar_rounded
                             : Icons.sensors_off_rounded,
                     title:
                         isScanning
                             ? 'Searching nearby'
+                            : _isPreparingScan
+                            ? 'Preparing Bluetooth'
+                            : state == GoDirectConnectionState.error
+                            ? 'Bluetooth scan failed'
+                            : provider.hasCompletedScan
+                            ? 'No Go Direct devices found'
                             : 'No respiration belt selected',
                     message:
                         isScanning
-                            ? 'Keep the belt awake and within Bluetooth range.'
+                            ? 'Keep the belt awake with its Bluetooth LED '
+                                'flashing red and within range.'
+                            : _isPreparingScan
+                            ? 'Checking permissions and the Bluetooth adapter.'
+                            : state == GoDirectConnectionState.error
+                            ? (provider.lastError ??
+                                'Check Bluetooth permissions and try again.')
+                            : provider.hasCompletedScan
+                            ? 'Press the belt button once so its Bluetooth LED '
+                                'flashes red. Disconnect it from Graphical '
+                                'Analysis or any other app, then scan again.'
                             : 'Start a scan to discover available Go Direct devices.',
                   )
                   : ListView.separated(
@@ -399,9 +570,9 @@ class _GoDirectScanScreenState extends State<GoDirectScanScreen> {
                                       Text(
                                         device.id,
                                         style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(fontSize: 12),
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(fontSize: 12),
                                       ),
                                     ],
                                   ),

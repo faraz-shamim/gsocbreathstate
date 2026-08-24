@@ -32,6 +32,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   SelectedBleDevice? _selectedPolarDevice;
   bool _isConnectingPolar = false;
+  bool _isExporting = false;
   final fileSharer = FileWriterService();
   int _settingsTitleTapCount = 0;
   DateTime? _lastTapTime;
@@ -127,15 +128,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   _buildPatientsRow(context, isDark),
                                   ResultDivider(isDark: isDark),
                                   Consumer<PolarConnectProvider>(
-                                    builder: (context, polarProvider, _) =>
-                                        _buildPolarRow(context, polarProvider, isDark),
+                                    builder:
+                                        (context, polarProvider, _) =>
+                                            _buildPolarRow(
+                                              context,
+                                              polarProvider,
+                                              isDark,
+                                            ),
                                   ),
                                   ResultDivider(isDark: isDark),
                                   AnimatedEntrance(
                                     delay: const Duration(milliseconds: 240),
                                     child: Consumer<GoDirectProvider>(
-                                      builder: (context, gdProvider, _) =>
-                                          _buildBeltRow(context, gdProvider, isDark),
+                                      builder:
+                                          (context, gdProvider, _) =>
+                                              _buildBeltRow(
+                                                context,
+                                                gdProvider,
+                                                isDark,
+                                              ),
                                     ),
                                   ),
                                   if (kIsWeb) ...[
@@ -163,10 +174,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 isDark: isDark,
                                 title: "Export Data",
                                 trailing: _CompactButton(
-                                  label: "Export Data",
+                                  label:
+                                      _isExporting
+                                          ? "Exporting..."
+                                          : "Export Data",
                                   color: AppTheme.emerald,
                                   textColor: AppTheme.obsidian,
-                                  onPressed: _exportPatientCsv,
+                                  onPressed:
+                                      _isExporting ? null : _exportPatientCsv,
                                 ),
                               ),
                             ),
@@ -193,7 +208,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         style: AppTheme.luxuryItalic(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.35),
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.35),
         ).copyWith(letterSpacing: 1.4),
       ),
     );
@@ -228,39 +245,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
           title: const Text("Switch App Mode"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: AppMode.values.map((mode) {
-              String label = "";
-              switch (mode) {
-                case AppMode.clinician:
-                  label = "Clinician Mode";
-                  break;
-                case AppMode.patientWithPolar:
-                  label = "Patient (with Polar)";
-                  break;
-                case AppMode.patientWithoutPolar:
-                  label = "Patient (No Polar)";
-                  break;
-              }
-              return ListTile(
-                title: Text(label),
-                selected: appModeProvider.mode == mode,
-                selectedColor: AppTheme.emerald,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusXs),
-                ),
-                onTap: () {
-                  appModeProvider.setMode(mode);
-                  context.read<NavBarProvider>().changeIndex(0);
-                  Navigator.of(ctx).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Switched to $label'),
-                      backgroundColor: AppTheme.emerald,
+            children:
+                AppMode.values.map((mode) {
+                  String label = "";
+                  switch (mode) {
+                    case AppMode.clinician:
+                      label = "Clinician Mode";
+                      break;
+                    case AppMode.patientWithPolar:
+                      label = "Patient (with Polar)";
+                      break;
+                    case AppMode.patientWithoutPolar:
+                      label = "Patient (No Polar)";
+                      break;
+                  }
+                  return ListTile(
+                    title: Text(label),
+                    selected: appModeProvider.mode == mode,
+                    selectedColor: AppTheme.emerald,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                     ),
+                    onTap: () {
+                      appModeProvider.setMode(mode);
+                      context.read<NavBarProvider>().changeIndex(0);
+                      Navigator.of(ctx).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Switched to $label'),
+                          backgroundColor: AppTheme.emerald,
+                        ),
+                      );
+                    },
                   );
-                },
-              );
-            }).toList(),
+                }).toList(),
           ),
           actions: [
             TextButton(
@@ -273,30 +291,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
-  Widget _buildAppModeRow(BuildContext context, AppMode currentMode, bool isDark) {
+  Widget _buildAppModeRow(
+    BuildContext context,
+    AppMode currentMode,
+    bool isDark,
+  ) {
     return _SettingsRow(
       icon: Icons.admin_panel_settings_rounded,
       iconColor: AppTheme.emerald,
       isDark: isDark,
       title: "App Mode",
-      subtitle: currentMode == AppMode.clinician
-          ? "Clinician Mode"
-          : currentMode == AppMode.patientWithPolar
+      subtitle:
+          currentMode == AppMode.clinician
+              ? "Clinician Mode"
+              : currentMode == AppMode.patientWithPolar
               ? "Patient (with Polar)"
               : "Patient (No Polar)",
       subtitleColor: AppTheme.emerald,
       trailing: DropdownButtonHideUnderline(
         child: DropdownButton<AppMode>(
           value: currentMode,
-          icon: const Icon(Icons.arrow_drop_down_rounded, color: AppTheme.emerald),
+          icon: const Icon(
+            Icons.arrow_drop_down_rounded,
+            color: AppTheme.emerald,
+          ),
           dropdownColor: isDark ? AppTheme.charcoal : AppTheme.pureWhite,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           borderRadius: BorderRadius.circular(AppTheme.radiusSm),
           items: const [
-            DropdownMenuItem(value: AppMode.clinician, child: Text("Clinician")),
+            DropdownMenuItem(
+              value: AppMode.clinician,
+              child: Text("Clinician"),
+            ),
             DropdownMenuItem(
               value: AppMode.patientWithPolar,
               child: Text("Patient (Polar)"),
@@ -323,20 +351,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
       iconColor: AppTheme.softSage,
       isDark: isDark,
       title: "Patients",
-      subtitleBuilder: (_) => Consumer<PatientProvider>(
-        builder: (_, pp, __) => Text(
-          '${pp.patients.length} profile(s)',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.emerald,
-              ),
-        ),
-      ),
+      subtitleBuilder:
+          (_) => Consumer<PatientProvider>(
+            builder:
+                (_, pp, __) => Text(
+                  '${pp.patients.length} profile(s)',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppTheme.emerald),
+                ),
+          ),
       trailing: _CompactButton(
         label: 'Manage',
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const PatientListScreen()),
-        ),
+        onPressed:
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const PatientListScreen()),
+            ),
       ),
     );
   }
@@ -347,10 +378,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     bool isDark,
   ) {
     final connected = polarProvider.isConnected;
-    final statusText = connected
-        ? (polarProvider.deviceName ?? 'Connected')
-        : 'Disconnected';
-    final statusColor = connected ? const Color(0xFF16A34A) : AppTheme.dustyRose;
+    final statusText =
+        connected ? (polarProvider.deviceName ?? 'Connected') : 'Disconnected';
+    final statusColor =
+        connected ? const Color(0xFF16A34A) : AppTheme.dustyRose;
 
     return _SettingsRow(
       icon: Icons.bluetooth,
@@ -360,9 +391,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       subtitle: statusText,
       subtitleColor: statusColor,
       trailing: _CompactButton(
-        label: _isConnectingPolar
-            ? "Connecting..."
-            : connected
+        label:
+            _isConnectingPolar
+                ? "Connecting..."
+                : connected
                 ? "Reconnect"
                 : "Connect",
         onPressed: () => _connectPolar(context, polarProvider),
@@ -442,14 +474,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   ) {
     final state = gdProvider.connectionState;
     final isGdConnected = gdProvider.isConnected;
-    final statusText = isGdConnected
-        ? (gdProvider.connectedDeviceName ?? 'Connected')
-        : state == GoDirectConnectionState.scanning
+    final statusText =
+        isGdConnected
+            ? (gdProvider.connectedDeviceName ?? 'Connected')
+            : state == GoDirectConnectionState.scanning
             ? 'Scanning…'
+            : state == GoDirectConnectionState.error
+            ? (gdProvider.lastError ?? 'Connection error')
             : 'Disconnected';
-    final statusColor = isGdConnected
-        ? const Color(0xFF16A34A)
-        : state == GoDirectConnectionState.scanning
+    final statusColor =
+        isGdConnected
+            ? const Color(0xFF16A34A)
+            : state == GoDirectConnectionState.scanning
             ? Colors.amber
             : AppTheme.dustyRose;
 
@@ -479,17 +515,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         final ok = await gdProvider.connectViaBrowser();
         if (!ok && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Go Direct connection failed or cancelled.'),
+            SnackBar(
+              content: Text(
+                gdProvider.lastError ??
+                    'Go Direct connection failed or cancelled.',
+              ),
               backgroundColor: AppTheme.dustyRose,
             ),
           );
         }
       }
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const GoDirectScanScreen()),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const GoDirectScanScreen()));
     }
   }
 
@@ -498,13 +537,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       icon: Icons.bluetooth_searching_rounded,
       iconColor: AppTheme.softSage,
       isDark: isDark,
-      title: "Web Bluetooth is used for sensor connections. "
+      title:
+          "Web Bluetooth is used for sensor connections. "
           "Ensure your browser supports it (Chrome/Edge). "
           "Microphone-based breathing is not available on web.",
     );
   }
 
   Future<void> _exportPatientCsv() async {
+    if (_isExporting) return;
+    setState(() => _isExporting = true);
     try {
       final db = context.read<AppDatabase>();
       final patient = context.read<PatientProvider>().activePatient;
@@ -521,10 +563,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final csv = await db.generatePatientCsv(patient.id);
       final safeName =
           patient.name.replaceAll(RegExp(r'[^\w]'), '_').toLowerCase();
-      await fileSharer.exportCsv(csv, safeName);
+      final result = await fileSharer.exportCsv(csv, safeName);
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Export ready.')));
+      final message = switch (result) {
+        CsvExportStatus.shared => 'Export sent to the share sheet.',
+        CsvExportStatus.dismissed => 'Export cancelled.',
+        CsvExportStatus.unavailable =>
+          'Export prepared, but the share result was unavailable.',
+      };
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } catch (e) {
       developer.log('CSV export error: $e');
       if (!mounted) return;
@@ -534,6 +583,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           backgroundColor: AppTheme.dustyRose,
         ),
       );
+    } finally {
+      if (mounted) setState(() => _isExporting = false);
     }
   }
 }
@@ -590,10 +641,11 @@ class _SettingsRow extends StatelessWidget {
                     child: Text(
                       subtitle!,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: subtitleColor ??
-                                Theme.of(context).colorScheme.onSurface.withValues(
-                                      alpha: 0.55,
-                                    ),
+                        color:
+                            subtitleColor ??
+                            Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.55),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -601,10 +653,7 @@ class _SettingsRow extends StatelessWidget {
               ],
             ),
           ),
-          if (trailing != null) ...[
-            const SizedBox(width: 10),
-            trailing!,
-          ],
+          if (trailing != null) ...[const SizedBox(width: 10), trailing!],
         ],
       ),
     );
@@ -613,7 +662,7 @@ class _SettingsRow extends StatelessWidget {
 
 class _CompactButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Color? color;
   final Color? textColor;
 
@@ -641,8 +690,9 @@ class _CompactButton extends StatelessWidget {
         elevation: 0,
         shadowColor: background.withValues(alpha: 0.22),
         surfaceTintColor: Colors.transparent,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusXs)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTheme.radiusXs),
+        ),
         textStyle: const TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w800,

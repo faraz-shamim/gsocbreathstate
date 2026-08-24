@@ -10,9 +10,9 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Breath State uses the microphone to detect your breathing pattern.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Used to connect to Polar devices</string>
+	<string>Breath State uses Bluetooth to connect to Polar sensors and the Vernier respiration belt.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Used to connect to Polar devices</string>
+	<string>Breath State uses Bluetooth to connect to Polar sensors and the Vernier respiration belt.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
