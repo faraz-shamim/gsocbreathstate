@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state_ble_simulator/main.dart';
 import 'package:breath_state_ble_simulator/simulator_controller.dart';
 import 'package:flutter/material.dart';

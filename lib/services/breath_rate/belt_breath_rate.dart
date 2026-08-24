@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 library;
 class BeltBreathResult {
   final double bpm;

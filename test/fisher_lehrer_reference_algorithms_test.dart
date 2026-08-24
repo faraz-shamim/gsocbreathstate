@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;

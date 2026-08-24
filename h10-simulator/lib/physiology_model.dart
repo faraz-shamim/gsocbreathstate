@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:math' as math;
 
 import 'polar_protocol.dart';

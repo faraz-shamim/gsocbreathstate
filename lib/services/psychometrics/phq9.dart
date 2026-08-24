@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'scale_engine.dart';
 
 const phq9Definition = QuestionnaireDefinition(

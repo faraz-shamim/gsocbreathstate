@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:convert';
 
 import 'package:breath_state/screens/session_detail_page.dart';

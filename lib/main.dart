@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state/providers/app_mode_provider.dart';
 import 'package:breath_state/providers/breathing_sound_provider.dart';
 import 'package:breath_state/providers/go_direct_provider.dart';

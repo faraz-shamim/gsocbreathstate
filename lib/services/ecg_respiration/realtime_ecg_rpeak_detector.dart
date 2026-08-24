@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state/services/biofeedback/signal_quality_index.dart';
 import 'package:breath_state/services/ecg_respiration/ecg_rpeak_detector.dart';
 

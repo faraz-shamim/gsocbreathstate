@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:math' as math;
 
 import 'package:breath_state/services/psychometrics/psychometric_scales.dart';

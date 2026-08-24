@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 enum BreathingPhase { inhale, hold, exhale, emptyHold }
 
 extension BreathingPhaseLabel on BreathingPhase {

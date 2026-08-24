@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:breath_state/services/breath_rate/process_data.dart';

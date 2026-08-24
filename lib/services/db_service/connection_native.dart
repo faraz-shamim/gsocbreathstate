@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:io';
 
 import 'package:drift/drift.dart';

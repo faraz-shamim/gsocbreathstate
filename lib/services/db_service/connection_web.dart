@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 

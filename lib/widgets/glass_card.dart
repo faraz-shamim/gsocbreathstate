@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:ui';
 
 import 'package:breath_state/theme/app_theme.dart';

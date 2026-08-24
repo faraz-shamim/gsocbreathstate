@@ -1,4 +1,5 @@
-﻿import 'package:breath_state/providers/patient_provider.dart';
+﻿// SPDX-License-Identifier: AGPL-3.0-only
+import 'package:breath_state/providers/patient_provider.dart';
 import 'package:breath_state/screens/patient_list_screen.dart';
 import 'package:breath_state/theme/app_theme.dart';
 import 'package:breath_state/widgets/scale_on_press.dart';

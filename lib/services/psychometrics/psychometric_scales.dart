@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'gad7.dart';
 import 'pcl5.dart';
 import 'phq9.dart';

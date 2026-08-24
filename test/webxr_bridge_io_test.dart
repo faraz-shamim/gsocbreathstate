@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';

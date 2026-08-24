@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:breath_state/providers/app_mode_provider.dart';

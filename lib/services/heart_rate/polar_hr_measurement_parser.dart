@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 class PolarHeartRateMeasurement {
   final int heartRateBpm;
   final List<double> rrIntervalsMs;

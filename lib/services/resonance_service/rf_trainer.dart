@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state/providers/polar_connect_provider.dart';
 import 'package:breath_state/screens/rf_assessment_screen.dart';
 import 'package:breath_state/services/heart_rate/polar_connect.dart';

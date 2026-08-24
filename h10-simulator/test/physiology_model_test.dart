@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state_ble_simulator/physiology_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 

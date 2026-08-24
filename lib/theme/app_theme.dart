@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

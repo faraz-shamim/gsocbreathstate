@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state/services/hrv_analysis/hrv_time_domain.dart';
 
 class WebPolarEcgSample {

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:convert';
 
 import 'package:breath_state/services/db_service/database.dart';

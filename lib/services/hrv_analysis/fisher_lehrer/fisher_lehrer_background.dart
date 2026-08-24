@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:flutter/foundation.dart';
 
 import 'fisher_lehrer_analyzer.dart';

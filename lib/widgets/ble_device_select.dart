@@ -1,4 +1,5 @@
-﻿import 'dart:async';
+﻿// SPDX-License-Identifier: AGPL-3.0-only
+import 'dart:async';
 
 import 'package:breath_state/services/heart_rate/polar_pmd_protocol.dart';
 import 'package:breath_state/theme/app_theme.dart';

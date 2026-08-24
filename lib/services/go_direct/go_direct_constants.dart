@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 library;
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';

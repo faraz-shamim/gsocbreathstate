@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state/providers/patient_provider.dart';
 import 'package:breath_state/services/db_service/database.dart';
 import 'package:breath_state/services/psychometrics/psychometric_scales.dart';

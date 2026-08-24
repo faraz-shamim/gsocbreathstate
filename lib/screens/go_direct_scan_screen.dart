@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:async';
 
 import 'package:breath_state/providers/go_direct_provider.dart';

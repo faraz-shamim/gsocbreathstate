@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:convert';

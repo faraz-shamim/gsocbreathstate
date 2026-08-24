@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 export 'fisher_lehrer_analyzer.dart';
 export 'fisher_lehrer_background.dart';
 export 'fisher_lehrer_models.dart';

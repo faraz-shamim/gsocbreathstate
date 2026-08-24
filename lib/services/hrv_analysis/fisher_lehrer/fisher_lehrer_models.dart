@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'fisher_lehrer_protocol.dart';
 
 enum RfAcquisitionMode { measured, estimated }

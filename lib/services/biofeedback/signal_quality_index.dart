@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 library;
 
 import 'dart:math' as math;

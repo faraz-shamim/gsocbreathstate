@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:breath_state/services/go_direct/go_direct_service.dart';

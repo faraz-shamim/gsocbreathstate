@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 import 'package:breath_state/services/db_service/database.dart';
 import 'package:breath_state/services/hrv_analysis/hrv_time_domain.dart';
 import 'package:drift/drift.dart' hide isNotNull;
